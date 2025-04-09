@@ -120,7 +120,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Sidebar */
 .navbar-gradient {
-    background: linear-gradient(90deg, #0d47a1, #1976d2, #42a5f5);
+    background: linear-gradient(90deg, #043175, #1062b5, #0c7dda);
 }
 
 .navbar-gradient .nav-link {
