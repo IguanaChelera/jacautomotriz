@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ URL::asset('DataTables/datatables.min.css') }}" />
     <!-- Tu CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/styles.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bootstrap-5.3.3-dist/css/bootstrap-icons.css') }}">
 </head>
 <body>
     {{-- Incluye la navbar (sigue llamándose "sidebar") --}}

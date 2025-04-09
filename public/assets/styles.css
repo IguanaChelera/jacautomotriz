@@ -119,26 +119,27 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* Sidebar */
-.sidebar {
-    background-color: #49494a; /* Fondo oscuro */
-    color: #ffffff;
-    padding: 20px;
-    height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+.navbar-gradient {
+    background: linear-gradient(90deg, #0d47a1, #1976d2, #42a5f5);
 }
 
-.sidebar .nav-link {
-    color: #ffffff;
-    padding: 10px 15px;
-    margin: 5px 0;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+.navbar-gradient .nav-link {
+    color: #ffffff !important;
+    transition: color 0.3s ease;
 }
 
-.sidebar .nav-link:hover {
-    background-color: #007bff; /* Azul */
-    color: #ffffff;
+.navbar-gradient .nav-link:hover {
+    color: #ffe082 !important;
 }
+
+.navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar-brand:hover {
+    color: #ffe082 !important;
+}
+
 
 /* Breadcrumbs */
 .breadcrumb {
