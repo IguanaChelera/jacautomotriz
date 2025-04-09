@@ -1,27 +1,27 @@
-<nav class="sidebar nav flex-column pt-8">
-    <!-- Imagen del sidebar -->
-    <div class="sidebar-logo text-center mb-4">
-        <img src="{{ asset('assets/JAC-Logo.png') }}" alt="Logo Jac Automotriz" class="img-fluid" style="max-width: 150px;">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top px-3">
+    <!-- Logo + Nombre -->
+    <a class="navbar-brand d-flex align-items-center">
+        <img src="{{ asset('assets/JAC-Logo.png') }}" alt="Logo Jac Automotriz" height="40" class="me-2">
+        JAC Automotriz
+    </a>
+
+    <!-- Botón hamburguesa (para móviles) -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+        aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Menú de navegación -->
+    <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/citas') }}">Citas</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/clientes') }}">Clientes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/empleados') }}">Empleados</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/puestos') }}">Puestos</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/servicios') }}">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/catalogos/ventas') }}">Ventas</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/reportes') }}">Reportes</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url('/logout') }}">Salir</a></li>
+        </ul>
     </div>
-
-    <!-- Línea horizontal para separar la imagen de los enlaces -->
-    <hr class="sidebar-divider">
-
-    <!-- Enlaces de navegación -->
-    <a href="{{ url('/catalogos/citas') }}" class="nav-link">Citas</a>
-    <a href="{{ url('/catalogos/clientes') }}" class="nav-link">Clientes</a>
-    <a href="{{ url('/catalogos/empleados') }}" class="nav-link">Empleados</a>
-    <a href="{{ url('/catalogos/puestos') }}" class="nav-link">Puestos</a>
-
-    <!-- Línea horizontal para agrupar secciones -->
-    <hr class="sidebar-divider">
-
-    <a href="{{ url('/catalogos/servicios') }}" class="nav-link">Servicios</a>
-    <a href="{{ url('/catalogos/ventas') }}" class="nav-link">Ventas</a>
-
-    <!-- Línea horizontal para separar secciones -->
-    <hr class="sidebar-divider">
-
-    <a href="{{ url('/reportes') }}" class="nav-link">Reportes</a>
-    <a href="{{ url('/logout') }}" class="nav-link">Salir</a>
 </nav>

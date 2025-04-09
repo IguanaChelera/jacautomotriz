@@ -4,24 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jac Automotriz</title>
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ URL::asset('bootstrap-5.3.3-dist/css/bootstrap.min.css') }}" />
-    <script src="{{ URL::asset('bootstrap-5.3.3-dist/js/bootstrap.min.js') }}"></script>
+    <!-- DataTables CSS -->
     <link rel="stylesheet" href="{{ URL::asset('DataTables/datatables.min.css') }}" />
-    <script src="{{ URL::asset('DataTables/datatables.min.js') }}"></script>
+    <!-- Tu CSS -->
     <link rel="stylesheet" href="{{ URL::asset('assets/styles.css') }}" />
 </head>
 <body>
-    <div class="row">
-        <div class="col-2">
-            @component("components.sidebar")
-            @endcomponent
-        </div>
-        <div class="col-10">
-            <div class="container">
-                @section("content")
-                @show
-            </div>
-        </div>
+    {{-- Incluye la navbar (sigue llamándose "sidebar") --}}
+    @component("components.sidebar")
+    @endcomponent
+
+    {{-- Contenido principal con espacio arriba para la navbar --}}
+    <div class="container mt-5 pt-4" style="margin-top: 100px;">
+        @section("content")
+        @show
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="{{ URL::asset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- DataTables JS -->
+    <script src="{{ URL::asset('DataTables/datatables.min.js') }}"></script>
 </body>
 </html>
