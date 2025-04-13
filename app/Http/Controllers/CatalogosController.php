@@ -63,18 +63,99 @@ class CatalogosController extends Controller
             ]
         ]);
     }
-
-    public function puestosGet(Request $request): View {
+        public function empleadosAgregarGet()
+    {
         $puestos = Puesto::all();
-        return view ('catalogos.puestosGet', [
-            "puestos" => $puestos,
-            "breadcrumbs" => [
-                "Inicio" => url("/"),
-                "Puestos" => url("/catalogos/puestos")
+        $breadcrumbs = [
+            ["nombre" => "Inicio", "url" => "/"],
+            ["nombre" => "Catálogos", "url" => "/catalogos"],
+            ["nombre" => "Agregar Empleado", "url" => "/catalogos/empleados/agregar"],
+        ];
+
+        return view('catalogos.empleadosAgregarGet', compact('puestos', 'breadcrumbs'));
+    }
+
+    public function empleadosAgregarPost(Request $request)
+    {
+        $empleado = new Empleado();
+        $empleado->nombre = $request->input('nombre');
+        $empleado->fecha_ingreso = $request->input('fecha_ingreso');
+        $empleado->id_puesto = $request->input('puesto');
+        $empleado->activo = $request->input('activo');
+        $empleado->save();
+
+        return redirect('/catalogos/empleados/agregar')->with('success', 'Empleado registrado correctamente');
+    }
+
+    public function puestosGet(): View
+    {
+        $puestos = Puesto::all();
+        return view('catalogos.puestosGet', [
+            'puestos' => $puestos, 
+            'breadcrumbs' => [
+                'Inicio' => url('/'), 
+                'Puestos' => url('/catalogos/puestos')
             ]
         ]);
     }
 
+    public function puestosAgregarGet(): View
+    {
+        return view('catalogos.puestosAgregarGet', [
+            'breadcrumbs' => [
+                'Inicio' => url('/'),
+                'Puestos' => url('/catalogos/puestos'),
+                'Agregar' => url('/catalogos/puestos/agregar')
+            ]
+        ]);
+    }
+
+    public function puestosAgregarPost(Request $request)
+    {
+        $puesto = new Puesto([
+            'nombre_puesto' => ucwords(strtolower($request->input('nombre_puesto'))), 
+            'sueldo' => $request->input('sueldo')
+        ]);
+        $puesto->save();
+    
+        return redirect('/catalogos/puestos');
+    }
+
+    public function puestosEditarGet($id): View
+    {
+        $puesto = Puesto::findOrFail($id);
+        
+        return view('catalogos.puestosEditarGet', [
+            'puesto' => $puesto,
+            'breadcrumbs' => [
+                'Inicio' => url('/'),
+                'Puestos' => url('/catalogos/puestos'),
+                'Editar' => url("/catalogos/puestos/editar/$id")
+            ]
+        ]);
+    }
+
+    public function puestosEditarPost(Request $request, $id)
+    {
+        $request->validate([
+            'nombre_puesto' => 'required|max:50',
+            'sueldo' => 'required|numeric'
+        ]);
+    
+        $puesto = Puesto::findOrFail($id);
+        $puesto->update($request->only(['nombre_puesto', 'sueldo']));
+    
+        return redirect('/catalogos/puestos')->with('success', 'Puesto actualizado correctamente');
+    }
+
+    public function puestosEliminarGet($id)
+    {
+        $puesto = Puesto::findOrFail($id);
+        $puesto->delete();
+
+        return redirect('/catalogos/puestos')->with('success', 'Puesto eliminado correctamente');
+    }
+    
     public function ventasGet(Request $request): View {
         $ventas = Venta::all();
         return view ('catalogos.ventasGet', [

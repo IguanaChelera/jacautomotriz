@@ -19,4 +19,9 @@ class Empleado extends Model
     protected $estado;
     protected $fillable = ["nombre","apellidos","numeroSeguroSocial","experiencia","estado"];
     public $timestamps = false;
+    
+    public function puesto()
+    {
+        return $this->belongsTo(Puesto::class, 'id_puesto');
+    }
 }
