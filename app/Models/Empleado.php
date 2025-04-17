@@ -17,11 +17,17 @@ class Empleado extends Model
     protected $numeroSeguroSocial;
     protected $experiencia;
     protected $estado;
-    protected $fillable = ["nombre","apellidos","numeroSeguroSocial","experiencia","estado"];
+    protected $fk_id_puesto;
+    protected $fillable = ["nombre","apellidos","numeroSeguroSocial","experiencia","estado", "fk_id_puesto"];
     public $timestamps = false;
     
     public function puesto()
     {
-        return $this->belongsTo(Puesto::class, 'id_puesto');
+        return $this->belongsTo(Puesto::class, 'fk_id_puesto', 'id_puesto')
+            ->withDefault([
+                'nombre_puesto' => 'Sin puesto asignado',
+                'sueldo' => 0
+            ]);
     }
+
 }

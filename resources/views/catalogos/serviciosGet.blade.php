@@ -2,6 +2,13 @@
 @section("content")
 @component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
 @endcomponent
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="row my-4">
     <div class="col">
         <h1>Servicios</h1>
@@ -14,23 +21,39 @@
 <table class="table" id="maintable">
     <thead>
         <tr>
-            <th scope="col">ID</th>
-            <th scope="col">NOMBRE</th>
-            <th scope="col">ESTADO</th>
-            <th scope="col">COSTO</th>
-            <th scope="col">ACCIONES</th>
+            <th>ID</th>
+            <th>Nombre del Servicio</th>
+            <th>Costo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach($servicios as $servicio)
         <tr>
-            <td class="text-center">{{ $servicio->id_servicio }}</td>
-            <td class="text-center">{{ $servicio->nombreServicio }}</td>
-            <td class="text-center">{{ $servicio->estado }}</td>
-            <td class="text-center">{{ $servicio->costoServicio }}</td>
-            <td class="text-center">
-                <a href="{{ url('/catalogos/servicios/editar/' . $servicio->id_servicio) }}" class="btn btn-primary">Editar</a>
-                <a href="{{ url('/catalogos/servicios/eliminar/' . $servicio->id_servicio) }}" class="btn btn-danger">Eliminar</a>
+            <td>{{ $servicio->id_servicio }}</td>
+            <td>{{ $servicio->nombreServicio }}</td>
+            <td>${{ number_format($servicio->costoServicio, 2) }}</td>
+            <td>
+                @if($servicio->estado)
+                    <span class="badge bg-success">Activo</span>
+                @else
+                    <span class="badge bg-danger">Inactivo</span>
+                @endif
+            </td>
+            <td>
+                <a href="{{ url('/catalogos/servicios/editar/'.$servicio->id_servicio) }}" 
+                   class="btn btn-primary">Editar</a>
+                
+                @php
+                $accion = $servicio->estado ? 'Cancelar' : 'Activar';
+                $clase = $servicio->estado ? 'btn-warning' : 'btn-success';
+                @endphp
+                <a href="{{ url('/catalogos/servicios/cambiar-estado/'.$servicio->id_servicio) }}" 
+                class="btn {{ $clase }}"
+                onclick="return confirm('¿{{ $accion }} este servicio?')">
+                {{ $accion }}
+                </a>
             </td>
         </tr>
         @endforeach
