@@ -93,7 +93,12 @@ class CitaController extends Controller
 
     public function generarOrdenVentaGet($id)
     {
-        // Placeholder para la funcionalidad futura
         return redirect('/catalogos/citas')->with('info', 'Función de orden de venta en desarrollo');
+    }
+
+    public function index()
+    {
+        $citas = Cita::with('cliente')->get();
+        return view('citas.index', compact('citas'));
     }
 }

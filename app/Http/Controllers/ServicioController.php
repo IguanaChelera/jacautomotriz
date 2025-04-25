@@ -43,7 +43,7 @@ class ServicioController extends Controller
         Servicio::create([
             'nombreServicio' => $request->nombreServicio,
             'costoServicio' => $request->costoServicio,
-            'estado' => $request->estado ?? 1 // Activo por defecto
+            'estado' => $request->estado ?? 1
         ]);
 
         return redirect('/catalogos/servicios')->with('success', 'Servicio agregado correctamente');
@@ -80,7 +80,7 @@ class ServicioController extends Controller
     public function serviciosCambiarEstado($id)
     {
         $servicio = Servicio::findOrFail($id);
-        $nuevoEstado = $servicio->estado ? 0 : 1; // Invierte el estado actual
+        $nuevoEstado = $servicio->estado ? 0 : 1;
         $servicio->update(['estado' => $nuevoEstado]);
     
         $accion = $nuevoEstado ? 'reactivado' : 'cancelado';

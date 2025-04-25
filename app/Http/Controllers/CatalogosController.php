@@ -290,15 +290,4 @@ class CatalogosController extends Controller
         return redirect('/catalogos/puestos')->with('success', 'Puesto eliminado correctamente');
     }
     //Puestos
-    
-    public function ventasGet(Request $request): View {
-        $ventas = Venta::all();
-        return view ('catalogos.ventasGet', [
-            "ventas" => $ventas,
-            "breadcrumbs"  => [
-                "Inicio" => url("/"),
-                "Ventas" => url("/catalogos/ventas")
-            ]
-        ]);
-    }
 }
