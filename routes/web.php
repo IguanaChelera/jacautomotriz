@@ -53,4 +53,10 @@ Route::get("/catalogos/ventas", [CatalogosController::class, "ventasGet"]);
 
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
+// Ruta para mostrar el formulario de agregar venta
+Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
+
+// Ruta para procesar el envío del formulario de agregar venta
+Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
+
 

@@ -11,10 +11,6 @@ class Venta extends Model
     protected $primaryKey = 'id_venta';
     public $incrementing = true;
     protected $keyType = "int";
-    protected $total;
-    protected $fechaVenta;
-    protected $horaVenta;
-    protected $fk_id_cita;
-    protected $fillable = ["total","fechaVenta","horaVenta","fk_id_cita"];
-    public $timestamps = false;
+    protected $fillable = ["fk_id_servicio","precio_unitario","cantidad","subtotal","total","fechaVenta","horaVenta","fk_id_cita"];
+    public $timestamps=false;
 }
