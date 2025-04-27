@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Venta extends Model
 {
+    public function servicios()
+{
+    return $this->belongsToMany(Servicio::class, 'detalle_venta', 'id_venta', 'id_servicio');
+}
     use HasFactory;
     protected $table = 'venta';
     protected $primaryKey = 'id_venta';

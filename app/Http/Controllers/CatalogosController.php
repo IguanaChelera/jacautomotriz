@@ -318,29 +318,21 @@ class CatalogosController extends Controller
 
 
     public function ventasAgregarPost(Request $request)
-    {
-        // Validar los datos
-        $validated = $request->validate([
-            'fk_id_servicio' => 'required|exists:servicio,id_servicio',
-            'precio_unitario' => 'required|numeric|min:0',
-            'cantidad' => 'required|integer|min:1',
-            'fechaVenta' => 'required|date',
-            'horaVenta' => 'required',
-            'subtotal' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
-        ]);
-    
-        // Crear nueva venta
-        $venta = new Venta();
-        $venta->fk_id_servicio = $validated['fk_id_servicio'];
-        $venta->precio_unitario = $validated['precio_unitario'];
-        $venta->cantidad = $validated['cantidad'];
-        $venta->fechaVenta = $validated['fechaVenta'];
-        $venta->horaVenta = $validated['horaVenta'];
-        $venta->subtotal = $validated['subtotal'];
-        $venta->total = $validated['total'];
-        $venta->save();
-    
-        return redirect()->to('catalogos/ventas')->with('success', 'Venta registrada correctamente.');
-    }
-    }
+{
+    $request->validate([
+        'total' => 'required|numeric|min:0',
+        'servicios' => 'required|array',
+        'servicios.*' => 'exists:servicio,id_servicio',
+    ]);
+
+    // Primero creamos la venta
+    $venta = Venta::create([
+        'total' => $request->input('total')
+    ]);
+
+    // Asociamos los servicios seleccionados con la venta
+    $venta->servicios()->attach($request->input('servicios'));
+
+    return redirect('/catalogos/ventas')->with('success', 'Venta agregada correctamente');
+}
+}

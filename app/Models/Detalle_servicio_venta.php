@@ -14,9 +14,9 @@ class Detalle_servicio_venta extends Model
     protected $keyType = "int";
     protected $fk_id_servicio;
     protected $fk_id_venta;
+    protected $fk_costoServicio;
     protected $cantidad;
-    protected $precio_unitario;
     protected $subtotal;
-    protected $fillable = ["fk_id_servicio","fk_id_venta","cantidad","precio_unitario","subtotal"];
+    protected $fillable = ["fk_id_servicio","fk_id_venta","fk_costoServicio","cantidad","subtotal"];
     public $timestamps = false;
 }

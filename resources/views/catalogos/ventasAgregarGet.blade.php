@@ -16,10 +16,10 @@
             <div class="col-md-6">
                 <div class="form-group my-2">
                     <label for="fk_id_servicio">Servicio:</label>
-                    <select name="fk_id_servicio" id="fk_id_servicio" class="form-control" required onchange="colocarPrecio()">
+                    <select name="fk_id_servicio" id="fk_id_servicio" class="form-control" required onchange="colocarCosto()">
                         <option value="" disabled selected>Selecciona un servicio</option>
                         @foreach($servicios as $servicio)
-                            <option value="{{ $servicio->id_servicio }}" data-precio="{{ $servicio->costoServicio }}">
+                            <option value="{{ $servicio->id_servicio }}" data-costo="{{ $servicio->costoServicio }}">
                                 {{ $servicio->nombreServicio }} 
                             </option>
                         @endforeach
@@ -27,8 +27,8 @@
                 </div>
 
                 <div class="form-group my-2">
-                    <label for="precio_unitario">Precio Unitario:</label>
-                    <input type="number" step="0.01" name="precio_unitario" id="precio_unitario" class="form-control" required readonly>
+                    <label for="costoServicio">Costo Servicio:</label>
+                    <input type="number" step="0.01" name="costoServicio" id="costoServicio" class="form-control" readonly required>
                 </div>
 
                 <div class="form-group my-2">
@@ -39,23 +39,23 @@
 
             <div class="col-md-6">
                 <div class="form-group my-2">
-                    <label for="fecha">Fecha:</label>
+                    <label for="fechaVenta">Fecha:</label>
                     <input type="date" name="fechaVenta" id="fechaVenta" class="form-control" value="{{ date('Y-m-d') }}" required>
                 </div>
 
                 <div class="form-group my-2">
-                    <label for="hora">Hora:</label>
+                    <label for="horaVenta">Hora:</label>
                     <input type="time" name="horaVenta" id="horaVenta" class="form-control" value="{{ date('H:i') }}" required>
                 </div>
 
                 <div class="form-group my-2">
                     <label for="subtotal">Subtotal:</label>
-                    <input type="number" step="0.01" name="subtotal" id="subtotal" class="form-control" readonly>
+                    <input type="number" step="0.01" name="subtotal" id="subtotal" class="form-control" readonly required>
                 </div>
 
                 <div class="form-group my-2">
                     <label for="total">Total:</label>
-                    <input type="number" step="0.01" name="total" id="total" class="form-control" readonly>
+                    <input type="number" step="0.01" name="total" id="total" class="form-control" readonly required>
                 </div>
             </div>
         </div>
@@ -70,29 +70,34 @@
     @push('scripts')
         <script>
             const cantidadInput = document.getElementById('cantidad');
-            const precioUnitarioInput = document.getElementById('precio_unitario');
+            const costoServicioInput = document.getElementById('costoServicio');
             const subtotalInput = document.getElementById('subtotal');
             const totalInput = document.getElementById('total');
             const servicioSelect = document.getElementById('fk_id_servicio');
 
             function calcularTotal() {
                 const cantidad = parseFloat(cantidadInput.value) || 0;
-                const precioUnitario = parseFloat(precioUnitarioInput.value) || 0;
-                const subtotal = cantidad * precioUnitario;
+                const costoServicio = parseFloat(costoServicioInput.value) || 0;
+                const subtotal = cantidad * costoServicio;
                 subtotalInput.value = subtotal.toFixed(2);
-                totalInput.value = subtotal.toFixed(2); // Por ahora, el total es igual al subtotal
+                totalInput.value = subtotal.toFixed(2); // El total es igual al subtotal
             }
 
-            function colocarPrecio() {
+            function colocarCosto() {
                 const selectedOption = servicioSelect.options[servicioSelect.selectedIndex];
-                const precio = selectedOption.getAttribute('data-precio');
-                precioUnitarioInput.value = precio ? parseFloat(precio).toFixed(2) : '';
+                const costo = selectedOption ? selectedOption.getAttribute('data-costo') : 0;
+                
+                if (costo) {
+                    costoServicioInput.value = parseFloat(costo).toFixed(2);
+                } else {
+                    costoServicioInput.value = '';
+                }
 
-                calcularTotal(); // recalcular subtotal y total automáticamente al cambiar el servicio
+                calcularTotal(); // Recalcular automáticamente
             }
 
+            // Event Listeners
             cantidadInput.addEventListener('input', calcularTotal);
-            precioUnitarioInput.addEventListener('input', calcularTotal);
         </script>
     @endpush
 @endsection
