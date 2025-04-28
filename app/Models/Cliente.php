@@ -18,4 +18,9 @@ class Cliente extends Model
     protected $direccion;
     protected $fillable=["nombre","telefono","correo","direccion"];
     public $timestamps = false;
+
+    public function citas()
+    {
+        return $this->hasMany(Cita::class, 'fk_id_cliente', 'id_cliente');
+    }
 }

@@ -19,4 +19,9 @@ class Detalle_servicio_venta extends Model
     protected $subtotal;
     protected $fillable = ["fk_id_servicio","fk_id_venta","cantidad","precio_unitario","subtotal"];
     public $timestamps = false;
+
+    public function servicio()
+    {
+        return $this->belongsTo(Servicio::class, 'fk_id_servicio', 'id_servicio');
+    }
 }

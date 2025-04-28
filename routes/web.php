@@ -74,4 +74,9 @@ Route::get("/catalogos/ventas", [CatalogosController::class, "ventasGet"]);
 
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
+// Reportes
+Route::get("/reportes/servicio-mayor-solicitado", [ReportesController::class, "servicioMayorSolicitado"]);
+Route::get("/reportes/clientes-frecuentes", [ReportesController::class, "clientesFrecuentes"]);
+Route::get("/reportes/servicios-realizados-por-mes", [ReportesController::class, "serviciosRealizadosPorMes"]);
+
 
