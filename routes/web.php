@@ -49,14 +49,17 @@ Route::get("/catalogos/puestos/editar/{id}", [CatalogosController::class, 'puest
 Route::post("/catalogos/puestos/editar/{id}", [CatalogosController::class, 'puestosEditarPost']);
 Route::get("/catalogos/puestos/eliminar/{id}", [CatalogosController::class, 'puestosEliminarGet']);
 
-Route::get("/catalogos/ventas", [CatalogosController::class, "ventasGet"]);
-
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
-// Ruta para mostrar el formulario de agregar venta
+// Rutas para ventas
+Route::get("/catalogos/ventas", [CatalogosController::class, 'ventasGet']);
 Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
-
-// Ruta para procesar el envío del formulario de agregar venta
 Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
+Route::get("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarGet']);
+Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'ventasEditarPost']);
+Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
+
+//Reporte Servicios
+Route::get('reportes/servicios-realizados', [ReportesController::class, 'serviciosRealizadosGet']);
 
 
