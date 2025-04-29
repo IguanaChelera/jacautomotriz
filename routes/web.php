@@ -56,7 +56,7 @@ Route::get("/catalogos/ventas", [CatalogosController::class, 'ventasGet']);
 Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
 Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
 Route::get("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarGet']);
-Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'ventasEditarPost']);
+Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'ventasEditarPost']);////
 Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
 
 //Reporte Servicios
