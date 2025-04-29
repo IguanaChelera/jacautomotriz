@@ -443,4 +443,22 @@ class CatalogosController extends Controller
     }
     }
 
+
+
+    public function citasPorCliente($id): View
+    {
+        $cliente = Cliente::findOrFail($id);
+        $citas = $cliente->citas;
+
+        return view('catalogos.citasPorCliente', [
+            'cliente' => $cliente,
+            'citas' => $citas,
+            'breadcrumbs' => [
+                'Inicio' => url('/'),
+                'Clientes' => url('/catalogos/clientes'),
+                'Citas' => url("/catalogos/citas/cliente/$id")
+            ]
+        ]);
+    }
 }
+
