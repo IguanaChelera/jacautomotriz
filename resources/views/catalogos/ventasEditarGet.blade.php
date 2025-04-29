@@ -1,6 +1,7 @@
 @extends("components.layout")
 @section("content")
-@component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
+
+@component("components.breadcrumbs", ["breadcrumbs" => $breadcrumbs])
 @endcomponent
 
 <div class="row">
@@ -9,9 +10,10 @@
     </div>
 </div>
 
-<form method="post" action="{{ url('/catalogos/ventas/editar/' . $venta->id_venta) }}">
+<form method="POST" action="{{ url('/catalogos/ventas/editar/' . $venta->id_venta) }}">
     @csrf
-    @method('PUT') <div class="row">
+
+    <div class="row">
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="fk_id_cita">Cita:</label>
@@ -75,25 +77,27 @@
 </form>
 
 <script>
-    const citaSelect = document.getElementById('fk_id_cita');
+document.addEventListener('DOMContentLoaded', function() {
     const servicioSelect = document.getElementById('fk_id_servicio');
     const cantidadInput = document.getElementById('cantidad');
     const subtotalInput = document.getElementById('subtotal');
     const totalInput = document.getElementById('total');
 
     function calcularTotal() {
-        const costoServicio = parseFloat(servicioSelect.options[servicioSelect.selectedIndex].getAttribute('data-costo')) || 0;
-        const cantidad = parseInt(cantidadInput.value) || 0;
+        const costoServicio = parseFloat(servicioSelect?.options[servicioSelect.selectedIndex]?.getAttribute('data-costo')) || 0;
+        const cantidad = parseInt(cantidadInput?.value) || 0;
         const subtotal = costoServicio * cantidad;
         const total = subtotal;
 
-        subtotalInput.value = subtotal.toFixed(2);
-        totalInput.value = total.toFixed(2);
+        if (subtotalInput) subtotalInput.value = subtotal.toFixed(2);
+        if (totalInput) totalInput.value = total.toFixed(2);
     }
 
-    servicioSelect.addEventListener('change', calcularTotal);
-    cantidadInput.addEventListener('input', calcularTotal);
+    if (servicioSelect) servicioSelect.addEventListener('change', calcularTotal);
+    if (cantidadInput) cantidadInput.addEventListener('input', calcularTotal);
 
     calcularTotal();
+});
 </script>
-@endsection 
+
+@endsection

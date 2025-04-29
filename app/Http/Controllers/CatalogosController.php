@@ -293,14 +293,14 @@ class CatalogosController extends Controller
     //Puestos
     
     public function ventasGet(Request $request): View {
-        $ventas = Venta::all();
-        return view ('catalogos.ventasGet', [
-            "ventas" => $ventas,
-            "breadcrumbs"  => [
-                "Inicio" => url('/'),
-                "Ventas" => url('/catalogos/ventas')
-            ]
-        ]);
+    $ventas = Venta::with('cita')->get(); 
+    return view ('catalogos.ventasGet', [
+        "ventas" => $ventas,
+        "breadcrumbs"  => [
+            "Inicio" => url('/'),
+            "Ventas" => url('/catalogos/ventas')
+        ]
+    ]);
     }
 
 
@@ -380,67 +380,43 @@ class CatalogosController extends Controller
         ]);
     }
 
+
     public function ventasEditarPost(Request $request, $id)
     {
-        $validated = $request->validate([
-            'fk_id_cita' => 'required|exists:cita,id_Cita',
-            'fk_id_servicio' => 'required|exists:servicio,id_servicio',
+        // Validar datos
+        $request->validate([
+            'fk_id_cita' => 'required|integer',
+            'fk_id_servicio' => 'required|integer',
             'cantidad' => 'required|integer|min:1',
             'fechaVenta' => 'required|date',
-            'horaVenta' => 'required|date_format:H:i',
-            'subtotal' => 'required|numeric|min:0',
-            'total' => 'required|numeric|min:0',
+            'horaVenta' => 'required',
+            'subtotal' => 'required|numeric',
+            'total' => 'required|numeric',
         ]);
-
-        try {
-            DB::beginTransaction();
-
-            $venta = Venta::findOrFail($id);
-            $venta->total = $request->total;
-            $venta->fechaVenta = $request->fechaVenta;
-            $venta->horaVenta = $request->horaVenta;
-            $venta->fk_id_cita = $request->fk_id_cita;
-            $venta->save();
-
-            DB::table('detalle_servicio_venta')
-                ->where('fk_id_venta', $id)
-                ->update([
-                    'fk_id_servicio' => $request->fk_id_servicio,
-                    'cantidad' => $request->cantidad,
-                    'fk_costoServicio' => Servicio::find($request->fk_id_servicio)->costoServicio,
-                    'subtotal' => $request->subtotal,
-                ]);
-
-            DB::commit();
-
-            return redirect('/catalogos/ventas')->with('success', 'Venta actualizada correctamente');
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('error', 'Error al actualizar la venta: ' . $e->getMessage());
+    
+        // Buscar la venta y su detalle
+        $venta = Venta::find($id);
+        $ventaDetalle = DetalleVenta::where('fk_id_venta', $id)->first(); // Ajusta el modelo si el nombre es diferente
+    
+        if (!$venta || !$ventaDetalle) {
+            return redirect('/catalogos/ventas')->with('error', 'Venta no encontrada.');
         }
-    }
-
-    public function ventasEliminarGet($id)
-    {
-    try {
-        DB::beginTransaction();
-
-        $venta = Venta::findOrFail($id);
-
-        // Eliminar el detalle de la venta primero (si es necesario)
-        DB::table('detalle_servicio_venta')->where('fk_id_venta', $id)->delete();
-
-        $venta->delete();
-
-        DB::commit();
-
-        return redirect('/catalogos/ventas')->with('success', 'Venta eliminada correctamente');
-
-    } catch (\Exception $e) {
-        DB::rollback();
-        return back()->with('error', 'Error al eliminar la venta: ' . $e->getMessage());
-    }
+    
+        // Actualizar la venta
+        $venta->fk_id_cita = $request->fk_id_cita;
+        $venta->fechaVenta = $request->fechaVenta;
+        $venta->horaVenta = $request->horaVenta;
+        $venta->total = $request->total;
+        $venta->save();
+    
+        // Actualizar el detalle de la venta
+        $ventaDetalle->fk_id_servicio = $request->fk_id_servicio;
+        $ventaDetalle->cantidad = $request->cantidad;
+        $ventaDetalle->subtotal = $request->subtotal;
+        $ventaDetalle->save();
+    
+        // Redirigir con mensaje de éxito
+        return redirect('/catalogos/ventas')->with('success', 'Venta actualizada correctamente.');
     }
 
 }
