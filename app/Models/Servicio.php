@@ -21,4 +21,8 @@ class Servicio extends Model
     protected $costoServicio;
     protected $fillable = ["nombreServicio","estado","costoServicio"];
     public $timestamps = false;
+
+    public function detallesVenta() {
+        return $this->hasMany(Detalle_servicio_venta::class, 'fk_id_servicio', 'id_servicio');
+    }
 }

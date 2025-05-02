@@ -17,4 +17,13 @@ class Venta extends Model
     protected $keyType = "int";
     protected $fillable = ["fk_id_servicio","precio_unitario","cantidad","subtotal","total","fechaVenta","horaVenta","fk_id_cita"];
     public $timestamps=false;
+
+    public function cita()
+{
+    return $this->belongsTo(Cita::class, 'fk_id_cita', 'id_Cita');
+}
+public function detallesServicio()
+ {
+    return $this->hasMany(Detalle_servicio_venta::class, 'fk_id_venta', 'id_venta');
+}
 }

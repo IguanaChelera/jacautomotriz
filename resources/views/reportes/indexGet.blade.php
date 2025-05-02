@@ -17,7 +17,7 @@
             <a href="{{ url('/reportes/servicios-realizados-por-mes') }}" class="btn btn-outline-primary btn-lg w-100">Servicios Realizados Por Mes</a>
         </div>
         <div class="col-md-6 col-lg-4 mb-3">
-            <a href="{{ url('/reportes/servicios-realizados') }}" class="btn btn-outline-primary btn-lg w-100">Servicios Realizados</a>
+            <a href="{{ url('/reportes/reporte-ventas') }}" class="btn btn-outline-primary btn-lg w-100">Reporte Ventas</a>
         </div>
     </div>
 </div>

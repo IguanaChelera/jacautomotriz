@@ -20,9 +20,9 @@ class ReportesController extends Controller
             ]
         ]);
     }
-    public function serviciosRealizadosGet(): View
+    public function reporteVentas(): View // Renombrar la función para mayor claridad
     {
-        $serviciosRealizados = DB::table('detalle_servicio_venta')
+        $reporteVentas = DB::table('detalle_servicio_venta')
             ->join('venta', 'detalle_servicio_venta.fk_id_venta', '=', 'venta.id_venta')
             ->join('servicio', 'detalle_servicio_venta.fk_id_servicio', '=', 'servicio.id_servicio')
             ->select(
@@ -31,17 +31,17 @@ class ReportesController extends Controller
                 'servicio.nombreServicio as servicio',
                 'venta.id_venta',
                 'servicio.costoServicio',
-                'detalle_servicio_venta.subtotal',
+                'detalle_servicio_venta.cantidad', // Seleccionar la cantidad en lugar del subtotal
                 'venta.total'
             )
             ->get();
-
-        return view('reportes.serviciosRealizadosGet', [
-            'serviciosRealizados' => $serviciosRealizados,
+    
+        return view('reportes.reporteVentas', [ // Cambiar el nombre de la vista
+            'reporteVentas' => $reporteVentas, // Cambiar el nombre de la variable para la vista
             'breadcrumbs' => [
                 'Inicio' => url('/'),
-                'Reportes' => url('/reportes'), // Asumiendo que tienes una ruta para "Reportes"
-                'Servicios Realizados' => url('/reportes/servicios-realizados')
+                'Reportes' => url('/reportes'),
+                'Reporte Ventas' => url('/reportes/reporte-ventas') // Actualizar la URL del breadcrumb
             ]
         ]);
     }
