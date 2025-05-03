@@ -1,7 +1,7 @@
 @extends("components.layout")
 @section("content")
-    @component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
-    @endcomponent
+@component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
+@endcomponent
 
     <div class="row">
         <div class="form-group my-3">
@@ -10,7 +10,7 @@
     </div>
 
     <form method="post" action="{{ url("/catalogos/ventas/editar/{$venta->id_venta}") }}">
-        @csrf
+    @csrf
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group my-2">

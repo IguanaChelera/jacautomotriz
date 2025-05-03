@@ -47,5 +47,7 @@
     <script src="{{ URL::asset('bootstrap-5.3.3-dist/js/bootstrap.bundle.min.js') }}"></script>
     <!-- DataTables JS -->
     <script src="{{ URL::asset('DataTables/datatables.min.js') }}"></script>
+    @yield('scripts')
+
 </body>
 </html>

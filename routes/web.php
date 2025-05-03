@@ -72,13 +72,26 @@ Route::get("/catalogos/puestos/eliminar/{id}", [CatalogosController::class, 'pue
 
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
+// Rutas para generar recibo de orden de venta
+Route::prefix('orden-venta')->group(function () {
+     Route::get("/{id}/edit", [OrdenVentaController::class, 'edit'])->name('orden_venta.edit');
+     Route::get("/create/{cita}", [OrdenVentaController::class, 'create'])->name('orden_venta.create');
+     Route::post("/store", [OrdenVentaController::class, 'store'])->name('orden_venta.store');
+     Route::get("/{id}", [OrdenVentaController::class, 'show'])->name('orden_venta.show');
+     Route::get("/{id}/pdf", [OrdenVentaController::class, 'generatePdf'])->name('orden_venta.pdf');
+     Route::get("/{id}/edit", [OrdenVentaController::class, 'edit'])->name('orden_venta.edit');
+     Route::post("/{id}", [OrdenVentaController::class, 'update'])->name('orden_venta.update');
+
+ });
+
 // Rutas para ventas
-Route::get("/catalogos/ventas", [CatalogosController::class, 'ventasGet']);
+Route::get('/catalogos/ventas', [CatalogosController::class, 'ventasGet'])->name('ventas.index');
 Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
 Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
 Route::get("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarGet']);
 Route::post("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarPost']);
 Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
+Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'update'])->name('ventas.update');
 
 //Reporte ventas
 Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas']);

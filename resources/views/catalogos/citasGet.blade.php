@@ -44,8 +44,10 @@
                     <a href="{{ url('/catalogos/citas/cancelar/'.$cita->id_Cita) }}" 
                        class="btn btn-danger"
                        onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
-                    <a href="{{ url('/catalogos/citas/generar-orden/'.$cita->id_Cita) }}" 
-                       class="btn btn-success">Orden Venta</a>
+                    <a href="{{ route('orden_venta.create', ['cita' => $cita->id_Cita]) }}" 
+                        class="btn btn-success">
+                        Generar Orden
+                        </a>
                 </div>
             </td>
         </tr>

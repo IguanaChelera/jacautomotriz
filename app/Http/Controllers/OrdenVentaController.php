@@ -5,64 +5,85 @@ namespace App\Http\Controllers;
 use App\Models\Cita;
 use App\Models\Servicio;
 use App\Models\OrdenVenta;
-use App\Models\OrdenVentaItem;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrdenVentaController extends Controller
 {
-    public function createFromCita($idCita)
+    public function create($id_cita)
     {
-        $cita = Cita::with('cliente')->findOrFail($idCita);
+        $cita = Cita::with('cliente')->findOrFail($id_cita);
         $servicios = Servicio::where('estado', 1)->get();
-    
-        return view('ventas.orden_venta', [
-            'cita' => $cita,
-            'servicios' => $servicios,
-            'breadcrumbs' => [
-                'Inicio' => url('/'),
-                'Citas' => url('/catalogos/citas'),
-                'Generar Orden' => url()->current()
-            ]
-        ]);
+        $empleados = Empleado::where('estado', 1)->get();
+        
+        return view('orden_venta.create', compact('cita', 'servicios', 'empleados'));
     }
-
+    
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'fk_id_cita' => 'required|exists:cita,id_Cita',
-            'servicios' => 'required|array|min:1',
-            'servicios.*.id_servicio' => 'required|exists:servicio,id_servicio',
-            'servicios.*.cantidad' => 'required|integer|min:1',
-            'servicios.*.precio' => 'required|numeric|min:0',
-            'servicios.*.total' => 'required|numeric|min:0',
-            'total_general' => 'required|numeric|min:0'
+        $request->validate([
+            'id_cita' => 'required|exists:cita,id_Cita',
+            'id_empleado' => 'required|exists:empleado,id_Empleado',
+            'servicios' => 'required|array',
+            'servicios.*.id' => 'required|exists:servicio,id_servicio',
+            'servicios.*.cantidad' => 'required|integer|min:1'
         ]);
         
-        // Crear la orden
-        $orden = OrdenVenta::create([
+        $ordenVenta = OrdenVenta::create([
             'fecha' => now(),
-            'total' => $validated['total_general'],
-            'fk_id_cita' => $validated['fk_id_cita'],
-            'fk_id_cliente' => Cita::find($validated['fk_id_cita'])->fk_id_cliente,
-            'estado' => 1 // 1 = Activa, 0 = Inactiva
+            'total' => 0, 
+            'fk_id_cita' => $request->id_cita,
+            'fk_id_empleado' => $request->id_empleado
         ]);
         
-        // Crear items
-        foreach ($validated['servicios'] as $servicio) {
-            OrdenVentaItem::create([
+        $total = 0;
+        
+        foreach ($request->servicios as $servicio) {
+            $servicioModel = Servicio::find($servicio['id']);
+            $subtotal = $servicioModel->costoServicio * $servicio['cantidad'];
+            
+            $ordenVenta->servicios()->attach($servicio['id'], [
                 'cantidad' => $servicio['cantidad'],
-                'precio_unitario' => $servicio['precio'],
-                'subtotal' => $servicio['total'],
-                'fk_id_orden' => $orden->id_orden,
-                'fk_id_servicio' => $servicio['id_servicio']
+                'precio_unitario' => $servicioModel->costoServicio,
+                'subtotal' => $subtotal
             ]);
+            
+            $total += $subtotal;
         }
         
-        // Actualizar estado de la cita
-        Cita::where('id_Cita', $validated['fk_id_cita'])
-            ->update(['estado' => 'completada']);
+        $ordenVenta->update(['total' => $total]);
         
-        return redirect('/catalogos/citas')
-               ->with('success', 'Orden de venta generada correctamente');
+        return redirect()->route('orden_venta.show', $ordenVenta->id_orden_venta)
+            ->with('success', 'Orden de venta creada exitosamente');
+    }
+    
+    public function show($id)
+    {
+        $ordenVenta = OrdenVenta::with(['cita.cliente', 'empleado', 'servicios'])->findOrFail($id);
+        
+        return view('orden_venta.show', compact('ordenVenta'));
+    }
+    
+    public function edit($id)
+    {
+        $ordenVenta = OrdenVenta::with(['cita', 'detalleServicios.servicio'])->findOrFail($id);
+        $servicios = Servicio::where('estado', 1)->get();
+        $empleados = Empleado::where('estado', 1)->get();
+        
+        return view('orden_venta.edit', compact('ordenVenta', 'servicios', 'empleados'));
+    }
+    
+    public function update(Request $request, $id)
+    {
+    }
+    
+    public function generatePdf($id)
+    {
+        $ordenVenta = OrdenVenta::with(['cita.cliente', 'empleado', 'servicios'])->findOrFail($id);
+        
+        $pdf = PDF::loadView('orden_venta.pdf', compact('ordenVenta'));
+        
+        return $pdf->download('orden_venta_'.$id.'.pdf');
     }
 }

@@ -419,6 +419,21 @@ class CatalogosController extends Controller
                 return back()->with('error', 'Error al actualizar la venta: ' . $e->getMessage());
             }
         }
+        public function update(Request $request, $id)
+        {
+            $venta = Venta::findOrFail($id);
+
+            // Asigna los nuevos valores
+            $venta->fk_id_cita = $request->fk_id_cita;
+            $venta->fechaVenta = $request->fechaVenta;
+            $venta->horaVenta = $request->horaVenta;
+            $venta->total = $request->total;
+
+            $venta->save();
+
+            return redirect()->route('ventas.index')->with('success', 'Venta actualizada correctamente.');
+
+        }
 
     public function ventasEliminarGet($id)
     {
