@@ -12,7 +12,7 @@
 <form method="post" action="{{ url('catalogos/ventas/agregar') }}">
     @csrf
     <div class="row">
-        <div class="col-md-6">
+        <div class="coal-md-6">
             <div class="form-group my-2">
                 <label for="fk_id_cita">Cita:</label>
                 <select name="fk_id_cita" id="fk_id_cita" class="form-control" required>
@@ -84,7 +84,7 @@
         const costoServicio = parseFloat(servicioSelect.options[servicioSelect.selectedIndex].getAttribute('data-costo')) || 0;
         const cantidad = parseInt(cantidadInput.value) || 0;
         const subtotal = costoServicio * cantidad;
-        const total = subtotal;  // Por ahora, el total es igual al subtotal (sin impuestos, etc.)
+        const total = subtotal;  // Por ahora, el total es igual al subtotal (sin impuestos)
 
         subtotalInput.value = subtotal.toFixed(2);
         totalInput.value = total.toFixed(2);
@@ -93,7 +93,6 @@
     servicioSelect.addEventListener('change', calcularTotal);
     cantidadInput.addEventListener('input', calcularTotal);
 
-    // Inicializar los cálculos al cargar la página
     calcularTotal();
 </script>
 @endsection

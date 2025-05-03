@@ -3,6 +3,8 @@
 use App\Http\Controllers\CatalogosController;
 use App\Http\Controllers\ReportesController;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\CitaController;
+use App\Http\Controllers\OrdenVentaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () 
@@ -20,7 +22,25 @@ Route::post("/catalogos/clientes/editar/{id}", [CatalogosController::class, 'cli
 Route::get("/catalogos/clientes/eliminar/{id}", [CatalogosController::class, 'clientesEliminarGet']);
 Route::get("/catalogos/citas/cliente/{id}", [CatalogosController::class, 'citasPorCliente']);
 
-Route::get("/catalogos/citas", [CatalogosController::class, "citasGet"]);
+//Citas
+// Rutas para Citas
+Route::get("/catalogos/citas", [CitaController::class, 'citasGet']);
+Route::get("/catalogos/citas/agregar", [CitaController::class, 'citasAgregarGet']);
+Route::post("/catalogos/citas/agregar", [CitaController::class, 'citasAgregarPost']);
+Route::get("/catalogos/citas/editar/{id}", [CitaController::class, 'citasEditarGet']);
+Route::post("/catalogos/citas/editar/{id}", [CitaController::class, 'citasEditarPost']);
+Route::get("/catalogos/citas/cancelar/{id}", [CitaController::class, 'citasCancelarGet']);
+Route::get("/catalogos/citas/generar-orden/{id}", [CitaController::class, 'generarOrdenVentaGet']);
+
+
+//Ordenes de venta
+// Rutas para Órdenes de Venta
+Route::prefix('catalogos/citas')->group(function() {
+     Route::get('/generar-orden/{id}', [OrdenVentaController::class, 'createFromCita'])
+          ->name('ordenes.create.from.cita');
+     Route::post('/ordenes-venta', [OrdenVentaController::class, 'store'])
+          ->name('ordenes.store');
+ });
 
 //Servicios
 // Rutas para Servicios
@@ -30,6 +50,7 @@ Route::post("/catalogos/servicios/agregar", [ServicioController::class, 'servici
 Route::get("/catalogos/servicios/editar/{id}", [ServicioController::class, 'serviciosEditarGet']);
 Route::post("/catalogos/servicios/editar/{id}", [ServicioController::class, 'serviciosEditarPost']);
 Route::get("/catalogos/servicios/cambiar-estado/{id}", [ServicioController::class, 'serviciosCambiarEstado']);
+
 //Empelados
 // Rutas para Empleados
 Route::get("/catalogos/empleados", [CatalogosController::class, 'empleadosGet']);
@@ -51,15 +72,33 @@ Route::get("/catalogos/puestos/eliminar/{id}", [CatalogosController::class, 'pue
 
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
+// Rutas para generar recibo de orden de venta
+Route::prefix('orden-venta')->group(function () {
+     Route::get("/{id}/edit", [OrdenVentaController::class, 'edit'])->name('orden_venta.edit');
+     Route::get("/create/{cita}", [OrdenVentaController::class, 'create'])->name('orden_venta.create');
+     Route::post("/store", [OrdenVentaController::class, 'store'])->name('orden_venta.store');
+     Route::get("/{id}", [OrdenVentaController::class, 'show'])->name('orden_venta.show');
+     Route::get("/{id}/pdf", [OrdenVentaController::class, 'generatePdf'])->name('orden_venta.pdf');
+     Route::get("/{id}/edit", [OrdenVentaController::class, 'edit'])->name('orden_venta.edit');
+     Route::post("/{id}", [OrdenVentaController::class, 'update'])->name('orden_venta.update');
+
+ });
+
 // Rutas para ventas
-Route::get("/catalogos/ventas", [CatalogosController::class, 'ventasGet']);
+Route::get('/catalogos/ventas', [CatalogosController::class, 'ventasGet'])->name('ventas.index');
 Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
 Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
 Route::get("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarGet']);
-Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'ventasEditarPost']);
+Route::post("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarPost']);
 Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
+Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'update'])->name('ventas.update');
 
-//Reporte Servicios
-Route::get('reportes/servicios-realizados', [ReportesController::class, 'serviciosRealizadosGet']);
+//Reporte ventas
+Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas']);
+
+// Reportes
+Route::get("/reportes/servicio-mayor-solicitado", [ReportesController::class, "servicioMayorSolicitado"]);
+Route::get("/reportes/clientes-frecuentes", [ReportesController::class, "clientesFrecuentes"]);
+Route::get("/reportes/servicios-realizados-por-mes", [ReportesController::class, "serviciosRealizadosPorMes"]);
 
 
