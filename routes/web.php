@@ -94,7 +94,7 @@ Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'vent
 Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'update'])->name('ventas.update');
 
 //Reporte ventas
-Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas']);
+Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas'])->name('reporteVentas');
 
 // Reportes
 Route::get("/reportes/servicio-mayor-solicitado", [ReportesController::class, "servicioMayorSolicitado"]);

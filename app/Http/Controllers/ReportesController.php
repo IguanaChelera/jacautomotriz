@@ -20,9 +20,9 @@ class ReportesController extends Controller
             ]
         ]);
     }
-    public function reporteVentas(): View // Renombrar la función para mayor claridad
+    public function reporteVentas(Request $request)
     {
-        $reporteVentas = DB::table('detalle_servicio_venta')
+        $query = DB::table('detalle_servicio_venta')
             ->join('venta', 'detalle_servicio_venta.fk_id_venta', '=', 'venta.id_venta')
             ->join('servicio', 'detalle_servicio_venta.fk_id_servicio', '=', 'servicio.id_servicio')
             ->select(
@@ -31,17 +31,26 @@ class ReportesController extends Controller
                 'servicio.nombreServicio as servicio',
                 'venta.id_venta',
                 'servicio.costoServicio',
-                'detalle_servicio_venta.cantidad', // Seleccionar la cantidad en lugar del subtotal
+                'detalle_servicio_venta.cantidad',
                 'venta.total'
-            )
-            ->get();
-    
-        return view('reportes.reporteVentas', [ // Cambiar el nombre de la vista
-            'reporteVentas' => $reporteVentas, // Cambiar el nombre de la variable para la vista
+            );
+
+        // Aplicar filtros de fecha si están presentes
+        if ($request->filled('fecha_inicio')) {
+            $query->where('venta.fechaVenta', '>=', $request->input('fecha_inicio'));
+        }
+        if ($request->filled('fecha_fin')) {
+            $query->where('venta.fechaVenta', '<=', $request->input('fecha_fin'));
+        }
+
+        $reporteVentas = $query->get();
+
+        return view('reportes.reporteVentas', [
+            'reporteVentas' => $reporteVentas,
             'breadcrumbs' => [
                 'Inicio' => url('/'),
                 'Reportes' => url('/reportes'),
-                'Reporte Ventas' => url('/reportes/reporte-ventas') // Actualizar la URL del breadcrumb
+                'Reporte Ventas' => url('/reportes/reporte-ventas')
             ]
         ]);
     }

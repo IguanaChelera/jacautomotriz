@@ -11,6 +11,21 @@
 
     <div class="row">
         <div class="col-md-12">
+            <!-- Formulario para filtros de fecha -->
+            <form method="GET" action="{{ route('reporteVentas') }}" class="form-inline mb-3 p-3 bg-light rounded shadow-sm d-flex justify-content-start align-items-center">
+                <label for="fecha_inicio" class="mr-2 font-weight-bold">Fecha Inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control form-control-sm mr-4" style="width: 150px;" value="{{ request('fecha_inicio') }}">
+                
+                <label for="fecha_fin" class="mr-2 font-weight-bold">Fecha Fin:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" class="form-control form-control-sm mr-3" style="width: 150px;" value="{{ request('fecha_fin') }}">
+                
+                <button type="submit" class="btn btn-primary btn-sm">Filtrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -37,6 +52,12 @@
                             </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-right"><strong>Total Ventas:</strong></td>
+                            <td><strong>${{ number_format($reporteVentas->sum('total'), 2) }}</strong></td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         </div>
