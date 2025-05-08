@@ -55,6 +55,45 @@ class ReportesController extends Controller
         ]);
     }
 
+    public function reporteVentasDiarias(Request $request)
+    {
+        $query = DB::table('detalle_servicio_venta')
+            ->join('venta', 'detalle_servicio_venta.fk_id_venta', '=', 'venta.id_venta')
+            ->join('servicio', 'detalle_servicio_venta.fk_id_servicio', '=', 'servicio.id_servicio')
+            ->select(
+                'venta.id_venta',
+                'venta.fechaVenta as fecha',
+                'servicio.nombreServicio as servicio',
+                'servicio.costoServicio as costo',
+                'detalle_servicio_venta.cantidad',
+                DB::raw('detalle_servicio_venta.cantidad * servicio.costoServicio as total')
+            );
+
+        // Aplicar filtro por fecha
+        if ($request->filled('fecha')) {
+            $query->whereDate('venta.fechaVenta', $request->input('fecha'));
+        } else {
+            // Si no se selecciona una fecha, usar la fecha actual
+            $query->whereDate('venta.fechaVenta', now()->toDateString());
+        }
+
+        $reporteVentasDiarias = $query->get();
+
+        // Calcular el total de ventas del día
+        $totalVentas = $reporteVentasDiarias->sum('total');
+
+        return view('reportes.reporteVentasDiarias', [
+            'reporteVentasDiarias' => $reporteVentasDiarias,
+            'totalVentas' => $totalVentas,
+            'fechaSeleccionada' => $request->input('fecha', now()->toDateString()),
+            'breadcrumbs' => [
+                'Inicio' => url('/'),
+                'Reportes' => url('/reportes'),
+                'Reporte Ventas Diarias' => url('/reportes/reporte-ventas-diarias')
+            ]
+        ]);
+    }
+
     public function servicioMayorSolicitado()
     {
         $servicio = Detalle_servicio_venta::select('fk_id_servicio', DB::raw('COUNT(*) as total'))

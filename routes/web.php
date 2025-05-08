@@ -100,5 +100,6 @@ Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas
 Route::get("/reportes/servicio-mayor-solicitado", [ReportesController::class, "servicioMayorSolicitado"]);
 Route::get("/reportes/clientes-frecuentes", [ReportesController::class, "clientesFrecuentes"]);
 Route::get("/reportes/servicios-realizados-por-mes", [ReportesController::class, "serviciosRealizadosPorMes"]);
+Route::get('reportes/reporte-ventas-diarias', [ReportesController::class, 'reporteVentasDiarias'])->name('reporteVentasDiarias');
 
 
