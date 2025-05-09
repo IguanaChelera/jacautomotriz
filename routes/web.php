@@ -31,7 +31,7 @@ Route::get("/catalogos/citas/editar/{id}", [CitaController::class, 'citasEditarG
 Route::post("/catalogos/citas/editar/{id}", [CitaController::class, 'citasEditarPost']);
 Route::get("/catalogos/citas/cancelar/{id}", [CitaController::class, 'citasCancelarGet']);
 Route::get("/catalogos/citas/generar-orden/{id}", [CitaController::class, 'generarOrdenVentaGet']);
-
+Route::get('/catalogos/citas/{id}/servicios', [CatalogosController::class, 'obtenerServiciosPorCita']);
 
 //Ordenes de venta
 // Rutas para Órdenes de Venta

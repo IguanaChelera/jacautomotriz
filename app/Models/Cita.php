@@ -28,6 +28,6 @@ class Cita extends Model
 
     public function ordenVenta()
     {
-        return $this->hasOne(OrdenVenta::class, 'fk_id_cita'); // Cambiado a 'fk_id_cita'
+        return $this->hasOne(OrdenVenta::class, 'fk_id_cita');
     }
 }
