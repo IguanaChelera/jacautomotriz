@@ -21,7 +21,7 @@ class OrdenVenta extends Model
     
     public function cita()
     {
-        return $this->belongsTo(Cita::class, 'fk_id_cita');
+        return $this->belongsTo(Cita::class, 'fk_id_cita'); // Relación inversa
     }
     
     public function empleado()
