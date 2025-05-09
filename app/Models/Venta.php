@@ -26,4 +26,9 @@ public function detallesServicio()
  {
     return $this->hasMany(Detalle_servicio_venta::class, 'fk_id_venta', 'id_venta');
 }
+
+public function ordenVenta()
+{
+    return $this->hasOneThrough(OrdenVenta::class, Cita::class, 'id_Cita', 'id_orden_venta', 'fk_id_cita', 'id_orden_venta');
+}
 }

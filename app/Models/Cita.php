@@ -16,12 +16,18 @@ class Cita extends Model
         "horaCita",
         "marcaVehiculo",
         "modeloVehiculo",
-        "fk_id_cliente"
+        "fk_id_cliente",
+        "fk_id_orden_venta" // Correctamente configurada
     ];
     public $timestamps = false;
     
     public function cliente()
     {
         return $this->belongsTo(Cliente::class, 'fk_id_cliente');
+    }
+
+    public function ordenVenta()
+    {
+        return $this->hasOne(OrdenVenta::class,'fk_id_orden_venta');
     }
 }
