@@ -19,6 +19,9 @@
         <div class="col-md-6 col-lg-4 mb-3">
             <a href="{{ url('/reportes/reporte-ventas') }}" class="btn btn-outline-primary btn-lg w-100">Reporte Ventas</a>
         </div>
+        <div class="col-md-6 col-lg-4 mb-3">
+            <a href="{{ url('/reportes/reporte-ventas-diarias') }}" class="btn btn-outline-primary btn-lg w-100">Reporte Ventas Diarias</a>
+        </div>
     </div>
 </div>
 @endsection

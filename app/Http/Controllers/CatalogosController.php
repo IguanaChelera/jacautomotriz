@@ -86,12 +86,27 @@ class CatalogosController extends Controller
         return redirect('/catalogos/clientes')->with('success', 'Cliente actualizado correctamente');
     }
 
-    public function clientesEliminarGet($id)
+    public function alternarEstado($id_cliente)
     {
-        $cliente = Cliente::findOrFail($id);
-        $cliente->delete();
+        // Busca el cliente por su ID
+        $cliente = Cliente::findOrFail($id_cliente);
 
-        return redirect('/catalogos/clientes')->with('success', 'Cliente eliminado correctamente');
+        // Alterna el estado entre 1 (activo) y 0 (inactivo)
+        $cliente->activo = !$cliente->activo;
+
+        // Guarda los cambios en la base de datos
+        $cliente->save();
+
+        // Genera un mensaje de éxito
+        $accion = $cliente->activo ? 'activado' : 'desactivado';
+        return redirect('/catalogos/clientes')->with('success', "Cliente $accion correctamente.");
+    }
+
+    public function index()
+    {
+        // Muestra todos los clientes (activos e inactivos)
+        $clientes = Cliente::all();
+        return view('catalogos.clientes', compact('clientes'));
     }
     //Clientes
 
