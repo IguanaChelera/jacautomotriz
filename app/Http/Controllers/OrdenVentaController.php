@@ -8,6 +8,7 @@ use App\Models\OrdenVenta;
 use App\Models\Empleado;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 class OrdenVentaController extends Controller
 {
@@ -36,6 +37,21 @@ class OrdenVentaController extends Controller
             'fk_id_cita' => $request->id_cita,
             'fk_id_empleado' => $request->id_empleado
         ]);
+        
+        // Update the Cita with the fk_id_orden_venta
+        $idCita = $request->input('id_cita'); // Cambiado a 'id_cita' en minúsculas
+
+        // Registro de depuración
+        Log::info('ID de Cita recibido:', ['id_cita' => $idCita]);
+
+        $cita = Cita::find($idCita);
+
+        if (!$cita) {
+            return response()->json(['error' => 'Cita no encontrada', 'id_cita' => $idCita], 404); // Devuelve el ID recibido para depuración
+        }
+
+        $cita->fk_id_orden_venta = $ordenVenta->id_orden_venta; // Asigna el ID de la orden de venta
+        $cita->save();
         
         $total = 0;
         

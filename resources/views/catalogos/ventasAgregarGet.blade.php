@@ -20,6 +20,9 @@
                     @foreach($citas as $cita)
                         <option value="{{ $cita->id_Cita }}">
                             {{ $cita->fechaCita }} - {{ $cita->horaCita }} - {{ $cita->marcaVehiculo }} {{ $cita->modeloVehiculo }}
+                            @if($cita->ordenVenta)
+                                (Orden Venta: #{{ $cita->ordenVenta->id_orden_venta }})
+                            @endif
                         </option>
                     @endforeach
                 </select>
