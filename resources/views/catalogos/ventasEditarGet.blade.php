@@ -9,6 +9,16 @@
         </div>
     </div>
 
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <form method="post" action="{{ url("/catalogos/ventas/editar/{$venta->id_venta}") }}">
     @csrf
         <div class="row">
@@ -38,7 +48,8 @@
             <div class="col-md-6">
                 <div class="form-group my-2">
                     <label for="horaVenta">Hora de Venta:</label>
-                    <input type="time" name="horaVenta" id="horaVenta" class="form-control" value="{{ old('horaVenta', $venta->horaVenta) }}" required>
+                    <input type="time" name="horaVenta" id="horaVenta" class="form-control"
+    value="{{ old('horaVenta', \Carbon\Carbon::parse($venta->horaVenta)->format('H:i')) }}" required>
                 </div>
             </div>
         </div>

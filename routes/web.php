@@ -89,10 +89,9 @@ Route::get('/catalogos/ventas', [CatalogosController::class, 'ventasGet'])->name
 Route::get("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarGet'])->name('ventas.agregar');
 Route::post("/catalogos/ventas/agregar", [CatalogosController::class, 'ventasAgregarPost']);
 Route::get("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarGet']);
-Route::post("/catalogos/ventas/editar/{id}", [CatalogosController::class, 'ventasEditarPost']);
-Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
-Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'update'])->name('ventas.update');
 
+Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'ventasEliminarGet']);
+Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'ventasEditarPost'])->name('ventas.update');
 //Reporte ventas
 Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas'])->name('reporteVentas');
 Route::get('reportes/reporte-ventas-diarias', [ReportesController::class, 'reporteVentasDiarias'])->name('reporteVentasDiarias');
