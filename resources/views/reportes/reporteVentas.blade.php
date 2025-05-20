@@ -48,14 +48,22 @@
                                 <td>{{ $ventaDetalle->id_venta }}</td>
                                 <td>${{ number_format($ventaDetalle->costoServicio, 2) }}</td>
                                 <td>{{ $ventaDetalle->cantidad }}</td> 
-                                <td>${{ number_format($ventaDetalle->total, 2) }}</td>
+                                <td>
+                                    ${{ number_format($ventaDetalle->costoServicio * $ventaDetalle->cantidad, 2) }}
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6" class="text-right"><strong>Total Ventas:</strong></td>
-                            <td><strong>${{ number_format($reporteVentas->sum('total'), 2) }}</strong></td>
+                            <td>
+                                <strong>
+                                    ${{ number_format($reporteVentas->reduce(function($carry, $ventaDetalle) {
+                                        return $carry + ($ventaDetalle->costoServicio * $ventaDetalle->cantidad);
+                                    }, 0), 2) }}
+                                </strong>
+                            </td>
                         </tr>
                     </tfoot>
                 </table>
