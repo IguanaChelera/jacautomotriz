@@ -69,6 +69,7 @@ Route::post("/catalogos/puestos/agregar", [CatalogosController::class, 'puestosA
 Route::get("/catalogos/puestos/editar/{id}", [CatalogosController::class, 'puestosEditarGet']);
 Route::post("/catalogos/puestos/editar/{id}", [CatalogosController::class, 'puestosEditarPost']);
 Route::get("/catalogos/puestos/eliminar/{id}", [CatalogosController::class, 'puestosEliminarGet']);
+Route::get('/catalogos/puestos/cambiar-estado/{id}', [CatalogosController::class, 'cambiarEstado']);
 
 Route::get("/reportes", [ReportesController::class, "indexGet"]);
 
