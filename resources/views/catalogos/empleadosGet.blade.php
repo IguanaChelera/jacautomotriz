@@ -40,7 +40,6 @@
                 <a href="{{ url('/catalogos/empleados/editar/'.$empleado->id_Empleado) }}" 
                    class="btn btn-primary">Editar</a>
                 @php
-                // El estado es 1 (activo) o 0 (inactivo)
                 $accion = $empleado->estado == 1 ? 'Dar de Baja' : 'Dar de Alta';
                 $clase = $empleado->estado == 1 ? 'btn-danger' : 'btn-success';
                 @endphp

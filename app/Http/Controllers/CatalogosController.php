@@ -241,7 +241,7 @@ class CatalogosController extends Controller
         $empleado = \App\Models\Empleado::findOrFail($id);
         $empleado->estado = $empleado->estado == 1 ? 0 : 1;
         $empleado->save();
-        return redirect()->back()->with('success', 'Estado del empleado actualizado correctamente.');
+        return redirect('/catalogos/empleados')->with('success', 'Estado del empleado actualizado correctamente.');
     }
 
     //Empleados

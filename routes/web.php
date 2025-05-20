@@ -59,7 +59,7 @@ Route::post("/catalogos/empleados/agregar", [CatalogosController::class, 'emplea
 Route::get("/catalogos/empleados/editar/{id}", [CatalogosController::class, 'empleadosEditarGet']);
 Route::post("/catalogos/empleados/editar/{id}", [CatalogosController::class, 'empleadosEditarPost']);
 Route::get("/catalogos/empleados/eliminar/{id}", [CatalogosController::class, 'empleadosEliminarGet']);
-
+Route::get('/catalogos/empleados/alternar-estado/{id}', [CatalogosController::class, 'empleadosAlternarEstado']);
 
 //Puestos
 // Rutas para Puestos
