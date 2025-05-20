@@ -31,7 +31,9 @@ class ReportesController extends Controller
                 'venta.id_venta',
                 'servicio.costoServicio',
                 'detalle_servicio_venta.cantidad',
-                'venta.total'
+                // Calcular el subtotal por servicio
+                DB::raw('detalle_servicio_venta.cantidad * servicio.costoServicio as subtotal'),
+                'venta.total as total_venta'
             );
 
         // Aplicar filtros de fecha si están presentes
@@ -44,8 +46,12 @@ class ReportesController extends Controller
 
         $reporteVentas = $query->get();
 
+        // Sumar todos los subtotales de la tabla (no los totales únicos de venta)
+        $totalVentas = $reporteVentas->sum('subtotal');
+
         return view('reportes.reporteVentas', [
             'reporteVentas' => $reporteVentas,
+            'totalVentas' => $totalVentas,
             'breadcrumbs' => [
                 'Inicio' => url('/'),
                 'Reportes' => url('/reportes'),

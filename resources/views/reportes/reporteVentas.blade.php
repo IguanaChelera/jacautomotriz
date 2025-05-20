@@ -35,27 +35,27 @@
                             <th>Servicio</th>
                             <th>ID Venta</th>
                             <th>Costo Servicio</th>
-                            <th>Cantidad</th> 
-                            <th>Total Venta</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($reporteVentas as $ventaDetalle) 
+                        @foreach($reporteVentas as $ventaDetalle)
                             <tr>
                                 <td>{{ $ventaDetalle->id_servicio_venta }}</td>
                                 <td>{{ $ventaDetalle->fecha }}</td>
                                 <td>{{ $ventaDetalle->servicio }}</td>
                                 <td>{{ $ventaDetalle->id_venta }}</td>
                                 <td>${{ number_format($ventaDetalle->costoServicio, 2) }}</td>
-                                <td>{{ $ventaDetalle->cantidad }}</td> 
-                                <td>${{ number_format($ventaDetalle->total, 2) }}</td>
+                                <td>{{ $ventaDetalle->cantidad }}</td>
+                                <td>${{ number_format($ventaDetalle->subtotal, 2) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6" class="text-right"><strong>Total Ventas:</strong></td>
-                            <td><strong>${{ number_format($reporteVentas->sum('total'), 2) }}</strong></td>
+                            <td><strong>${{ number_format($totalVentas, 2) }}</strong></td>
                         </tr>
                     </tfoot>
                 </table>
