@@ -52,12 +52,6 @@
                             </tr>
                         @endforeach
                     </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="6" class="text-right"><strong>Total Ventas:</strong></td>
-                            <td><strong>${{ number_format($totalVentas, 2) }}</strong></td>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>

@@ -30,67 +30,13 @@ class ReportesController extends Controller
                 'servicio.nombreServicio as servicio',
                 'venta.id_venta',
                 'servicio.costoServicio',
-                'detalle_servicio_venta.cantidad',
-                // Calcular el subtotal por servicio
-                DB::raw('detalle_servicio_venta.cantidad * servicio.costoServicio as subtotal'),
-                'venta.total as total_venta'
-            );
-
-        // Aplicar filtros de fecha si están presentes
-        if ($request->filled('fecha_inicio')) {
-            $query->where('venta.fechaVenta', '>=', $request->input('fecha_inicio'));
-        }
-        if ($request->filled('fecha_fin')) {
-            $query->where('venta.fechaVenta', '<=', $request->input('fecha_fin'));
-        }
-
-        $reporteVentas = $query->get();
-
-        // Sumar todos los subtotales de la tabla (no los totales únicos de venta)
-        $totalVentas = $reporteVentas->sum('subtotal');
-
-        return view('reportes.reporteVentas', [
-            'reporteVentas' => $reporteVentas,
-            'totalVentas' => $totalVentas,
-            'breadcrumbs' => [
-                'Inicio' => url('/'),
-                'Reportes' => url('/reportes'),
-                'Reporte Ventas' => url('/reportes/reporte-ventas')
-            ]
-        ]);
-    }
-
-    public function reporteVentasDiarias(Request $request)
-    {
-        $query = DB::table('detalle_servicio_venta')
-            ->join('venta', 'detalle_servicio_venta.fk_id_venta', '=', 'venta.id_venta')
-            ->join('servicio', 'detalle_servicio_venta.fk_id_servicio', '=', 'servicio.id_servicio')
-            ->select(
-                'venta.id_venta',
-                'venta.fechaVenta as fecha',
-                'servicio.nombreServicio as servicio',
-                'servicio.costoServicio as costo',
-                'detalle_servicio_venta.cantidad',
-                DB::raw('detalle_servicio_venta.cantidad * servicio.costoServicio as total')
-            );
-
-        // Aplicar filtro por fecha
-        if ($request->filled('fecha')) {
-            $query->whereDate('venta.fechaVenta', $request->input('fecha'));
-        } else {
-            // Si no se selecciona una fecha, usar la fecha actual
-            $query->whereDate('venta.fechaVenta', now()->toDateString());
-        }
-
-        $reporteVentasDiarias = $query->get();
-
-        // Calcular el total de ventas del día
-        $totalVentas = $reporteVentasDiarias->sum('total');
-
-        return view('reportes.reporteVentasDiarias', [
-            'reporteVentasDiarias' => $reporteVentasDiarias,
-            'totalVentas' => $totalVentas,
-            'fechaSeleccionada' => $request->input('fecha', now()->toDateString()),
+                'detalle_servicio_venta.cantidad', // Seleccionar la cantidad en lugar del subtotal
+                'venta.total'
+            )
+            ->get();
+    
+        return view('reportes.reporteVentas', [ // Cambiar el nombre de la vista
+            'reporteVentas' => $reporteVentas, // Cambiar el nombre de la variable para la vista
             'breadcrumbs' => [
                 'Inicio' => url('/'),
                 'Reportes' => url('/reportes'),

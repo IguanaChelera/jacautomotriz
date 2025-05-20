@@ -95,11 +95,12 @@ Route::get("/catalogos/ventas/eliminar/{id}", [CatalogosController::class, 'vent
 Route::post('/catalogos/ventas/editar/{id}', [CatalogosController::class, 'update'])->name('ventas.update');
 
 //Reporte ventas
-Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas'])->name('reporteVentas');
-Route::get('reportes/reporte-ventas-diarias', [ReportesController::class, 'reporteVentasDiarias'])->name('reporteVentasDiarias');
+Route::get('reportes/reporte-ventas', [ReportesController::class, 'reporteVentas']);
+
 // Reportes
 Route::get("/reportes/servicio-mayor-solicitado", [ReportesController::class, "servicioMayorSolicitado"]);
 Route::get("/reportes/clientes-frecuentes", [ReportesController::class, "clientesFrecuentes"]);
 Route::get("/reportes/servicios-realizados-por-mes", [ReportesController::class, "serviciosRealizadosPorMes"]);
+Route::get('reportes/reporte-ventas-diarias', [ReportesController::class, 'reporteVentasDiarias'])->name('reporteVentasDiarias');
 
 
