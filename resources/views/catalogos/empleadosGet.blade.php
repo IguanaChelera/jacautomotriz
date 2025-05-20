@@ -37,11 +37,18 @@
             <td class="text-center">{{ $empleado->experiencia }} años</td>
             <td class="text-center">{{ $empleado->estado ? 'Activo' : 'Inactivo'}}</td>
             <td class="text-center">
-            <a href="{{ url("/catalogos/empleados/editar/{$empleado->id_Empleado}") }}" 
+                <a href="{{ url('/catalogos/empleados/editar/'.$empleado->id_Empleado) }}" 
                    class="btn btn-primary">Editar</a>
-                <a href="{{ url("/catalogos/empleados/eliminar/{$empleado->id_Empleado}") }}" 
-                   class="btn btn-danger"
-                   onclick="return confirm('¿Eliminar este empleado?')">Eliminar</a> 
+                @php
+                $accion = $empleado->estado ? 'Dar de Baja' : 'Dar de Alta';
+                $clase = $empleado->estado ? 'btn-danger' : 'btn-success';
+                @endphp
+
+                <a href="{{ url('/catalogos/empleados/alternar-estado/'.$empleado->id_Empleado) }}" 
+                class="btn {{ $clase }}"
+                onclick="return confirm('¿{{ $accion }} este empleado?')">
+                    {{ $accion }}
+                </a>
             </td>
         </tr>
         @endforeach

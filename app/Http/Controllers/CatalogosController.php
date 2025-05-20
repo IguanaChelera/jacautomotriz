@@ -306,6 +306,19 @@ class CatalogosController extends Controller
 
         return redirect('/catalogos/puestos')->with('success', 'Puesto eliminado correctamente');
     }
+
+    public function cambiarEstado($id)
+    {
+        $puesto = Puesto::findOrFail($id);
+        $nuevoEstado = request('estado');
+        $estadosValidos = ['activo', 'inactivo', 'pendiente', 'eliminado'];
+        if (in_array($nuevoEstado, $estadosValidos)) {
+            $puesto->estado = $nuevoEstado;
+            $puesto->save();
+            return redirect()->back()->with('success', 'Estado del puesto actualizado correctamente.');
+        }
+        return redirect()->back()->with('error', 'Estado no válido.');
+    }
     //Puestos
     
  

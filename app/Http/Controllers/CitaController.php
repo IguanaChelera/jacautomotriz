@@ -86,9 +86,21 @@ class CitaController extends Controller
     public function citasCancelarGet($id)
     {
         $cita = Cita::findOrFail($id);
+        if ($cita->fk_id_orden_venta) {
+            return redirect('/catalogos/citas')->with('error', 'No se puede cancelar una cita que tiene una orden de venta asociada.');
+        }
         $cita->delete();
 
         return redirect('/catalogos/citas')->with('success', 'Cita cancelada correctamente');
+    }
+
+    public function realizarCita($id)
+    {
+        $cita = Cita::findOrFail($id);
+        $cita->realizada = true;
+        $cita->save();
+
+        return redirect('/catalogos/citas')->with('success', 'Cita marcada como realizada.');
     }
 
     public function generarOrdenVentaGet($id)
