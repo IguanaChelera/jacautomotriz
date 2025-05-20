@@ -40,9 +40,16 @@
             <td>
                 <a href="{{ url('/catalogos/clientes/editar/'.$cliente->id_cliente) }}" 
                    class="btn btn-primary">Editar</a>
-                <a href="{{ url('/catalogos/clientes/eliminar/'.$cliente->id_cliente) }}" 
-                   class="btn btn-danger"
-                   onclick="return confirm('¿Eliminar este cliente?')">Eliminar</a>
+                @php
+                $accion = $cliente->activo ? 'Dar de Baja' : 'Dar de Alta';
+                $clase = $cliente->activo ? 'btn-danger' : 'btn-success';
+                @endphp
+
+                <a href="{{ url('/catalogos/clientes/alternar-estado/'.$cliente->id_cliente) }}" 
+                class="btn {{ $clase }}"
+                onclick="return confirm('¿{{ $accion }} este cliente?')">
+                    {{ $accion }}
+                </a>
                 <a href="{{ url('/catalogos/citas/cliente/'.$cliente->id_cliente) }}" 
                    class="btn btn-info">Ver Citas</a>
             </td>

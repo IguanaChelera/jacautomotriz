@@ -2,6 +2,13 @@
 @section("content")
 @component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
 @endcomponent
+
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 <div class="row my-4">
     <div class="col">
         <h1>Citas</h1>
@@ -14,27 +21,34 @@
 <table class="table" id="maintable">
     <thead>
         <tr>
-            <th scope="col">ID</th>
-            <th scope="col">FECHA</th>
-            <th scope="col">HORA</th>
-            <th scope="col">MARCA DEL VEHICULO</th>
-            <th scope="col">MODELO DEL VEHICULO</th>
-            <th scope="col">FK CLIENTE</th>
-            <th scope="col">ACCIONES</th>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Vehículo</th>
+            <th>Cliente</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
         @foreach($citas as $cita)
         <tr>
-            <td class="text-center">{{ $cita->id_Cita }}</td>
-            <td class="text-center">{{ $cita->fechaCita }}</td>
-            <td class="text-center">{{ $cita->horaCita }}</td>
-            <td class="text-center">{{ $cita->marcaVehiculo }}</td>
-            <td class="text-center">{{ $cita->modeloVehiculo }}</td>
-            <td class="text-center">{{ $cita->fk_id_cliente }}</td>
-            <td class="text-center">
-                <a href="{{ url('/catalogos/citas/editar/' . $cita->id_Cita) }}" class="btn btn-primary">Editar</a>
-                <a href="{{ url('/catalogos/citas/eliminar/' . $cita->id_Cita) }}" class="btn btn-danger">Eliminar</a>
+            <td>{{ $cita->id_Cita }}</td>
+            <td>{{ \Carbon\Carbon::parse($cita->fechaCita)->format('d/m/Y') }}</td>
+            <td>{{ $cita->horaCita }}</td>
+            <td>{{ $cita->marcaVehiculo }} {{ $cita->modeloVehiculo }}</td>
+            <td>{{ $cita->cliente->nombre ?? 'Cliente no encontrado' }}</td>
+            <td>
+                <div class="btn-group" role="group">
+                    <a href="{{ url('/catalogos/citas/editar/'.$cita->id_Cita) }}" 
+                       class="btn btn-primary">Editar</a>
+                    <a href="{{ url('/catalogos/citas/cancelar/'.$cita->id_Cita) }}" 
+                       class="btn btn-danger"
+                       onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
+                    <a href="{{ route('orden_venta.create', ['cita' => $cita->id_Cita]) }}" 
+                        class="btn btn-success">
+                        Generar Orden
+                        </a>
+                </div>
             </td>
         </tr>
         @endforeach

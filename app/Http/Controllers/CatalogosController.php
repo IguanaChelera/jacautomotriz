@@ -11,6 +11,7 @@ use App\Models\Empleado;
 use App\Models\Puesto;
 use App\Models\Venta;
 use Illuminate\Support\Facades\DB;  // Para las transacciones
+use App\Models\OrdenVenta;
 
 class CatalogosController extends Controller
 {
@@ -86,12 +87,27 @@ class CatalogosController extends Controller
         return redirect('/catalogos/clientes')->with('success', 'Cliente actualizado correctamente');
     }
 
-    public function clientesEliminarGet($id)
+    public function alternarEstado($id_cliente)
     {
-        $cliente = Cliente::findOrFail($id);
-        $cliente->delete();
+        // Busca el cliente por su ID
+        $cliente = Cliente::findOrFail($id_cliente);
 
-        return redirect('/catalogos/clientes')->with('success', 'Cliente eliminado correctamente');
+        // Alterna el estado entre 1 (activo) y 0 (inactivo)
+        $cliente->activo = !$cliente->activo;
+
+        // Guarda los cambios en la base de datos
+        $cliente->save();
+
+        // Genera un mensaje de éxito
+        $accion = $cliente->activo ? 'activado' : 'desactivado';
+        return redirect('/catalogos/clientes')->with('success', "Cliente $accion correctamente.");
+    }
+
+    public function index()
+    {
+        // Muestra todos los clientes (activos e inactivos)
+        $clientes = Cliente::all();
+        return view('catalogos.clientes', compact('clientes'));
     }
     //Clientes
 
@@ -292,131 +308,223 @@ class CatalogosController extends Controller
     }
     //Puestos
     
+ 
+    //Ventas
     public function ventasGet(Request $request): View {
-    $ventas = Venta::with('cita')->get(); 
-    return view ('catalogos.ventasGet', [
-        "ventas" => $ventas,
-        "breadcrumbs"  => [
-            "Inicio" => url('/'),
-            "Ventas" => url('/catalogos/ventas')
-        ]
-    ]);
-    }
+            $ventas = Venta::with('cita')->get(); 
+            return view ('catalogos.ventasGet', [
+                "ventas" => $ventas,
+                "breadcrumbs"  => [
+                    "Inicio" => url('/'),
+                    "Ventas" => url('/catalogos/ventas')
+                ]
+            ]);
+        }
 
 
-    public function ventasAgregarGet(): View
-    {
-    $servicios = Servicio::all();
-    $citas = Cita::all();  // Obtener todas las citas
-
-    return view('catalogos.ventasAgregarGet', [
-        'servicios' => $servicios,
-        'citas' => $citas, // Pasar las citas a la vista
-        'breadcrumbs' => [
-            'Inicio' => url('/'),
-            'Ventas' => url('/catalogos/ventas'),
-            'Agregar' => url('/catalogos/ventas/agregar')
-        ]
-    ]);
-    }
-
-    public function ventasAgregarPost(Request $request)
-    {
-    $validated = $request->validate([
-        'fk_id_cita' => 'required|exists:cita,id_Cita',  // Validar la cita
-        'fk_id_servicio' => 'required|exists:servicio,id_servicio',
-        'cantidad' => 'required|integer|min:1',
-        'fechaVenta' => 'required|date',
-        'horaVenta' => 'required|date_format:H:i',
-        'subtotal' => 'required|numeric|min:0',
-        'total' => 'required|numeric|min:0',
-    ]);
-
-    try {
-        DB::beginTransaction();
-
-        $venta = new Venta();
-        $venta->total = $request->total;
-        $venta->fechaVenta = $request->fechaVenta;
-        $venta->horaVenta = $request->horaVenta;
-        $venta->fk_id_cita = $request->fk_id_cita;  // Asignar el ID de la cita
-        $venta->save();
-
-        // Crear el detalle de la venta
-        DB::table('detalle_servicio_venta')->insert([
-            'fk_id_servicio' => $request->fk_id_servicio,
-            'fk_id_venta' => $venta->id_venta,
-            'cantidad' => $request->cantidad,
-            'fk_costoServicio' => Servicio::find($request->fk_id_servicio)->costoServicio,
-            'subtotal' => $request->subtotal,
-        ]);
-
-        DB::commit();
-
-        return redirect('/catalogos/ventas')->with('success', 'Venta agregada correctamente');
-
-    } catch (\Exception $e) {
-        DB::rollback();
-        return back()->with('error', 'Error al agregar la venta: ' . $e->getMessage());
-    }
-    }
-    public function ventasEditarGet($id): View
-    {
-        $venta = Venta::findOrFail($id);
-        $ventaDetalle = DB::table('detalle_servicio_venta')->where('fk_id_venta', $id)->first();
+        public function ventasAgregarGet(): View
+        {
         $servicios = Servicio::all();
-        $citas = Cita::all();
+        $citas = Cita::all();  // Obtener todas las citas
 
-        return view('catalogos.ventasEditarGet', [
-            'venta' => $venta,
-            'ventaDetalle' => $ventaDetalle,
+        return view('catalogos.ventasAgregarGet', [
             'servicios' => $servicios,
-            'citas' => $citas,
+            'citas' => $citas, 
             'breadcrumbs' => [
                 'Inicio' => url('/'),
                 'Ventas' => url('/catalogos/ventas'),
-                'Editar' => url('/catalogos/ventas/editar/' . $id)
+                'Agregar' => url('/catalogos/ventas/agregar')
+            ]
+        ]);
+        }
+
+        public function ventasAgregarPost(Request $request)
+        {
+            $validated = $request->validate([
+                'fk_id_cita' => 'required|exists:cita,id_Cita',
+                'fechaVenta' => 'required|date',
+                'horaVenta' => 'required|date_format:H:i',
+                'servicios' => 'required|array', // Validar que se envíen servicios
+                'servicios.*.id' => 'required|exists:servicio,id_servicio',
+                'servicios.*.cantidad' => 'required|integer|min:1',
+            ]);
+        
+            try {
+                DB::beginTransaction();
+        
+                // Crear la venta
+                $venta = new Venta();
+                $venta->fk_id_cita = $request->fk_id_cita;
+                $venta->fechaVenta = $request->fechaVenta;
+                $venta->horaVenta = $request->horaVenta;
+                $venta->total = array_reduce($request->servicios, function ($carry, $servicio) {
+                    $precio = Servicio::find($servicio['id'])->costoServicio;
+                    return $carry + ($precio * $servicio['cantidad']);
+                }, 0);
+                $venta->save();
+        
+                // Insertar los detalles de la venta
+                foreach ($request->servicios as $servicio) {
+                    DB::table('detalle_servicio_venta')->insert([
+                        'fk_id_venta' => $venta->id_venta,
+                        'fk_id_servicio' => $servicio['id'],
+                        'cantidad' => $servicio['cantidad'],
+                        'fk_costoServicio' => Servicio::find($servicio['id'])->costoServicio,
+                        'subtotal' => Servicio::find($servicio['id'])->costoServicio * $servicio['cantidad'],
+                    ]);
+                }
+        
+                DB::commit();
+        
+                return redirect('/catalogos/ventas')->with('success', 'Venta agregada correctamente');
+            } catch (\Exception $e) {
+                DB::rollback();
+                return back()->with('error', 'Error al agregar la venta: ' . $e->getMessage());
+            }
+        }
+        public function ventasEditarGet($id): View
+        {
+            $venta = Venta::with('cita', 'detallesServicio')->findOrFail($id);
+            $servicios = Servicio::all();
+            $citas = Cita::all();
+    
+            return view('catalogos.ventasEditarGet', [
+                'venta' => $venta,
+                'servicios' => $servicios,
+                'citas' => $citas,
+                'breadcrumbs' => [
+                    'Inicio' => url('/'),
+                    'Ventas' => url('/catalogos/ventas'),
+                    'Editar' => url("/catalogos/ventas/editar/{$id}")
+                ]
+            ]);
+        }
+    
+        public function ventasEditarPost(Request $request, $id)
+        {
+            $validated = $request->validate([
+                'fk_id_cita' => 'required|exists:cita,id_Cita',
+                'fechaVenta' => 'required|date',
+                'horaVenta' => 'required|date_format:H:i',
+                'servicios' => 'required|array',
+                'servicios.*.id' => 'required|exists:servicio,id_servicio',
+                'servicios.*.cantidad' => 'required|integer|min:1',
+                'total' => 'required|numeric|min:0',
+            ]);
+
+            try {
+                DB::beginTransaction();
+
+                $venta = Venta::findOrFail($id);
+                $venta->fk_id_cita = $request->fk_id_cita;
+                $venta->fechaVenta = $request->fechaVenta;
+                $venta->horaVenta = $request->horaVenta;
+
+                // Calcula el total real usando los precios actuales de los servicios
+                $total = 0;
+                foreach ($request->servicios as $servicio) {
+                    $precio = Servicio::find($servicio['id'])->costoServicio;
+                    $total += $precio * $servicio['cantidad'];
+                }
+                $venta->total = $total;
+                $venta->save();
+
+                // Elimina los detalles anteriores
+                DB::table('detalle_servicio_venta')->where('fk_id_venta', $id)->delete();
+
+                // Inserta los nuevos detalles
+                foreach ($request->servicios as $servicio) {
+                    $precio = Servicio::find($servicio['id'])->costoServicio;
+                    DB::table('detalle_servicio_venta')->insert([
+                        'fk_id_venta' => $venta->id_venta,
+                        'fk_id_servicio' => $servicio['id'],
+                        'cantidad' => $servicio['cantidad'],
+                        'fk_costoServicio' => $precio,
+                        'subtotal' => $precio * $servicio['cantidad'],
+                    ]);
+                }
+
+                DB::commit();
+
+                return redirect('/catalogos/ventas')->with('success', 'Venta actualizada correctamente');
+            } catch (\Exception $e) {
+                DB::rollback();
+                return back()->with('error', 'Error al actualizar la venta: ' . $e->getMessage());
+            }
+        }
+        public function update(Request $request, $id)
+        {
+            $venta = Venta::findOrFail($id);
+
+            // Asigna los nuevos valores
+            $venta->fk_id_cita = $request->fk_id_cita;
+            $venta->fechaVenta = $request->fechaVenta;
+            $venta->horaVenta = $request->horaVenta;
+            $venta->total = $request->total;
+
+            $venta->save();
+
+            return redirect()->route('ventas.index')->with('success', 'Venta actualizada correctamente.');
+
+        }
+
+    public function ventasEliminarGet($id)
+    {
+    try {
+        DB::beginTransaction();
+
+        $venta = Venta::findOrFail($id);
+
+    
+        DB::table('detalle_servicio_venta' )->where('fk_id_venta', $id)->delete();
+
+        $venta->delete();
+
+        DB::commit();
+
+        return redirect('/catalogos/ventas')->with('success', 'Venta eliminada correctamente');
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        return back()->with('error', 'Error al eliminar la venta: ' . $e->getMessage());
+    }
+    }
+    //Ventas
+
+    //Citas
+    public function citasPorCliente($id): View
+    {
+        $cliente = Cliente::findOrFail($id);
+        $citas = $cliente->citas;
+
+        return view('catalogos.citasPorCliente', [
+            'cliente' => $cliente,
+            'citas' => $citas,
+            'breadcrumbs' => [
+                'Inicio' => url('/'),
+                'Clientes' => url('/catalogos/clientes'),
+                'Citas' => url("/catalogos/citas/cliente/$id")
             ]
         ]);
     }
 
-
-    public function ventasEditarPost(Request $request, $id)
+    public function obtenerServiciosPorCita($idCita)
     {
-        // Validar datos
-        $request->validate([
-            'fk_id_cita' => 'required|integer',
-            'fk_id_servicio' => 'required|integer',
-            'cantidad' => 'required|integer|min:1',
-            'fechaVenta' => 'required|date',
-            'horaVenta' => 'required',
-            'subtotal' => 'required|numeric',
-            'total' => 'required|numeric',
-        ]);
-    
-        // Buscar la venta y su detalle
-        $venta = Venta::find($id);
-        $ventaDetalle = DetalleVenta::where('fk_id_venta', $id)->first(); // Ajusta el modelo si el nombre es diferente
-    
-        if (!$venta || !$ventaDetalle) {
-            return redirect('/catalogos/ventas')->with('error', 'Venta no encontrada.');
-        }
-    
-        // Actualizar la venta
-        $venta->fk_id_cita = $request->fk_id_cita;
-        $venta->fechaVenta = $request->fechaVenta;
-        $venta->horaVenta = $request->horaVenta;
-        $venta->total = $request->total;
-        $venta->save();
-    
-        // Actualizar el detalle de la venta
-        $ventaDetalle->fk_id_servicio = $request->fk_id_servicio;
-        $ventaDetalle->cantidad = $request->cantidad;
-        $ventaDetalle->subtotal = $request->subtotal;
-        $ventaDetalle->save();
-    
-        // Redirigir con mensaje de éxito
-        return redirect('/catalogos/ventas')->with('success', 'Venta actualizada correctamente.');
-    }
+        $ordenVenta = OrdenVenta::where('fk_id_cita', $idCita)->with('servicios')->first();
 
+        if (!$ordenVenta) {
+            return response()->json(['error' => 'No se encontraron servicios para esta cita.'], 404);
+        }
+
+        return response()->json($ordenVenta->servicios->map(function ($servicio) {
+            return [
+                'id' => $servicio->id_servicio,
+                'nombre' => $servicio->nombreServicio,
+                'precio_unitario' => (float) $servicio->pivot->precio_unitario, // Asegura que sea un número
+                'cantidad' => $servicio->pivot->cantidad,
+                'subtotal' => (float) $servicio->pivot->subtotal, // Asegura que sea un número
+            ];
+        }));
+    }
 }
+
