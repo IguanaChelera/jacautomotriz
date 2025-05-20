@@ -40,13 +40,14 @@
                 <a href="{{ url('/catalogos/empleados/editar/'.$empleado->id_Empleado) }}" 
                    class="btn btn-primary">Editar</a>
                 @php
-                $accion = $empleado->estado ? 'Dar de Baja' : 'Dar de Alta';
-                $clase = $empleado->estado ? 'btn-danger' : 'btn-success';
+                // El estado es 1 (activo) o 0 (inactivo)
+                $accion = $empleado->estado == 1 ? 'Dar de Baja' : 'Dar de Alta';
+                $clase = $empleado->estado == 1 ? 'btn-danger' : 'btn-success';
                 @endphp
 
                 <a href="{{ url('/catalogos/empleados/alternar-estado/'.$empleado->id_Empleado) }}" 
-                class="btn {{ $clase }}"
-                onclick="return confirm('¿{{ $accion }} este empleado?')">
+                   class="btn {{ $clase }}"
+                   onclick="return confirm('¿{{ $accion }} este empleado?')">
                     {{ $accion }}
                 </a>
             </td>

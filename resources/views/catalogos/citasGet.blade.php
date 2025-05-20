@@ -48,17 +48,6 @@
                     @else
                         <button class="btn btn-danger" disabled title="No se puede cancelar, tiene orden de venta">Cancelar</button>
                     @endif
-                    @if(empty($cita->realizada) || !$cita->realizada)
-                        <form action="{{ url('/catalogos/citas/realizar/'.$cita->id_Cita) }}" method="POST" style="display:inline;">
-                            @csrf
-                            <button type="submit" class="btn btn-success"
-                                onclick="return confirm('¿Marcar esta cita como realizada?')">
-                                Marcar como realizada
-                            </button>
-                        </form>
-                    @else
-                        <span class="badge bg-success">Realizada</span>
-                    @endif
                     <a href="{{ route('orden_venta.create', ['cita' => $cita->id_Cita]) }}" 
                         class="btn btn-success">
                         Generar Orden

@@ -235,6 +235,15 @@ class CatalogosController extends Controller
 
         return redirect('/catalogos/empleados')->with('success', 'Empleado eliminado correctamente');
     }
+
+    public function empleadosAlternarEstado($id)
+    {
+        $empleado = \App\Models\Empleado::findOrFail($id);
+        $empleado->estado = $empleado->estado == 1 ? 0 : 1;
+        $empleado->save();
+        return redirect()->back()->with('success', 'Estado del empleado actualizado correctamente.');
+    }
+
     //Empleados
 
     //Puestos
