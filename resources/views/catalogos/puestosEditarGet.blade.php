@@ -28,7 +28,7 @@
     <div class="row my-2">
         <div class="col"></div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <button type="submit" class="btn btn-editar">Guardar cambios</button>
         </div>
     </div>
 </form>

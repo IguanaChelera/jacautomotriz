@@ -40,16 +40,16 @@
             <td>
                 <div class="btn-group" role="group">
                     <a href="{{ url('/catalogos/citas/editar/'.$cita->id_Cita) }}" 
-                       class="btn btn-primary">Editar</a>
+                       class="btn btn-editar">Editar</a>
                     @if(!$cita->fk_id_orden_venta)
                         <a href="{{ url('/catalogos/citas/cancelar/'.$cita->id_Cita) }}" 
-                           class="btn btn-danger"
+                           class="btn btn-baja"
                            onclick="return confirm('¿Cancelar esta cita?')">Cancelar</a>
                     @else
-                        <button class="btn btn-danger" disabled title="No se puede cancelar, tiene orden de venta">Cancelar</button>
+                        <button class="btn btn-baja" disabled title="No se puede cancelar, tiene orden de venta">Cancelar</button>
                     @endif
                     <a href="{{ route('orden_venta.create', ['cita' => $cita->id_Cita]) }}" 
-                        class="btn btn-success">
+                        class="btn btn-alta">
                         Generar Orden
                     </a>
                 </div>

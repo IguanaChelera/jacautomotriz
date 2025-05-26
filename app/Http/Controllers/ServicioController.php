@@ -8,9 +8,14 @@ use Illuminate\View\View;
 
 class ServicioController extends Controller
 {
-    public function serviciosGet(): View
+    public function serviciosGet(Request $request): View
     {
-        $servicios = Servicio::all();
+        // Aplica el filtro de estado si está presente
+        $query = \App\Models\Servicio::query();
+        if ($request->has('estado') && $request->estado !== '' && $request->estado !== null) {
+            $query->where('estado', (int)$request->estado);
+        }
+        $servicios = $query->get();
         
         return view('catalogos.serviciosGet', [
             'servicios' => $servicios,
@@ -72,7 +77,11 @@ class ServicioController extends Controller
         ]);
 
         $servicio = Servicio::findOrFail($id);
-        $servicio->update($request->all());
+        $servicio->update([
+            'nombreServicio' => $request->nombreServicio,
+            'costoServicio' => $request->costoServicio,
+            'estado' => (int)$request->estado
+        ]);
 
         return redirect('/catalogos/servicios')->with('success', 'Servicio actualizado correctamente');
     }

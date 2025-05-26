@@ -1,4 +1,4 @@
-    @extends("components.layout")
+@extends("components.layout")
     @section("content")
         @component("components.breadcrumbs",["breadcrumbs"=>$breadcrumbs])
         @endcomponent
@@ -31,8 +31,8 @@
                     <td class="text-center">{{ $venta->total }}</td>
                     <td class="text-center">{{ $venta->cita->id_Cita }}</td> {{-- Mostrar el ID de Cita --}}
                     <td class="text-center">
-                        <a href="{{ url('/catalogos/ventas/editar/' . $venta->id_venta) }}" class="btn btn-primary">Editar</a>
-                        <a href="{{ url('/catalogos/ventas/eliminar/' . $venta->id_venta) }}" class="btn btn-danger">Eliminar</a>
+                        <a href="{{ url('/catalogos/ventas/editar/' . $venta->id_venta) }}" class="btn btn-editar">Editar</a>
+                        <a href="{{ url('/catalogos/ventas/eliminar/' . $venta->id_venta) }}" class="btn btn-baja">Eliminar</a>
                     </td>
                 </tr>
                 @endforeach

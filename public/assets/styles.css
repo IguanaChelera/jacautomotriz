@@ -28,10 +28,10 @@ h3 {
     font-size: 1.75rem;
 }
 
-/* Botones */
+/* Botones base */
 button, .btn {
-    background-color: #007bff; /* Azul */
-    color: #ffffff;
+    background-color: transparent;
+    color: inherit;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -42,13 +42,78 @@ button, .btn {
     text-transform: uppercase;
 }
 
-button:hover, .btn:hover {
-    background-color: #0056b3; /* Azul más oscuro */
-    transform: translateY(-2px);
+/* Botón AGREGAR: Azul fuerte personalizado para todos los botones de agregar */
+.btn-agregar, .btn-add, .btn-nuevo, .btn-create {
+    background-color: #043175 !important;
+    color: #fff !important;
+    border-color: #043175 !important;
+}
+.btn-agregar:hover, .btn-add:hover, .btn-nuevo:hover, .btn-create:hover {
+    background-color: #1a2e3a !important; /* Un tono más oscuro de #043175 */
+    color: #fff !important;
+    border-color: #1a2e3a !important;
 }
 
-button:active, .btn:active {
-    transform: translateY(0);
+/* Botón EDITAR: Azul oscuro */
+.btn-editar, .btn-edit, .btn-modificar {
+    background-color: #043175 !important;
+    color: #fff !important;
+}
+.btn-editar:hover, .btn-edit:hover, .btn-modificar:hover {
+    background-color: #1a2e3a !important;
+}
+
+/* Botón CANCELAR o DAR DE BAJA: Rojo */
+.btn-cancelar, .btn-baja, .btn-danger, .btn-eliminar, .btn-delete {
+    background-color: #dc3545 !important; /* Rojo */
+    color: #fff !important;
+}
+.btn-cancelar:hover, .btn-baja:hover, .btn-danger:hover, .btn-eliminar:hover, .btn-delete:hover {
+    background-color: #b52a37 !important;
+}
+
+/* Botón ACTIVAR o DAR DE ALTA: Verde */
+.btn-activar, .btn-alta, .btn-success, .btn-habilitar {
+    background-color: #28a745 !important; /* Verde */
+    color: #fff !important;
+}
+.btn-activar:hover, .btn-alta:hover, .btn-success:hover, .btn-habilitar:hover {
+    background-color: #218838 !important;
+}
+
+/* Botón INFO: Turquesa */
+.btn-info, .btn-ver, .btn-detalles {
+    background-color: #17a2b8 !important; /* Turquesa */
+    color: #fff !important;
+}
+.btn-info:hover, .btn-ver:hover, .btn-detalles:hover {
+    background-color: #117a8b !important;
+}
+
+/* Botón ADVERTENCIA: Amarillo */
+.btn-warning, .btn-advertencia, .btn-warning-alt {
+    background-color: #ffc107 !important; /* Amarillo */
+    color: #212529 !important;
+}
+.btn-warning:hover, .btn-advertencia:hover, .btn-warning-alt:hover {
+    background-color: #e0a800 !important;
+}
+
+/* Si quieres personalizar aún más los botones azules en tu propio CSS: */
+.btn-primary, .btn.btn-primary {
+    background-color: #043175 !important;
+    border-color: #043175 !important;
+    color: #fff !important;
+}
+.btn-primary:hover, .btn.btn-primary:hover {
+    background-color: #1a2e3a !important;
+    border-color: #1a2e3a !important;
+    color: #fff !important;
+}
+.btn-primary:active, .btn.btn-primary:active {
+    background-color: #1a2e3a !important;
+    border-color: #1a2e3a !important;
+    color: #fff !important;
 }
 
 /* Tablas */
@@ -207,4 +272,21 @@ input:focus, select:focus, textarea:focus {
 th, td {
     text-align: center; /* Centra todo */
     vertical-align: middle; /* Centra verticalmente */
+}
+
+/* Centrar los botones dentro de las celdas de las tablas */
+td .btn,
+td button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+/* Opcional: para agrupar varios botones en una sola celda */
+td .btn-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
 }

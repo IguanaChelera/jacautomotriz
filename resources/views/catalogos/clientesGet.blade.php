@@ -39,10 +39,10 @@
             <td>{{ $cliente->direccion ?? 'N/A' }}</td>
             <td>
                 <a href="{{ url('/catalogos/clientes/editar/'.$cliente->id_cliente) }}" 
-                   class="btn btn-primary">Editar</a>
+                   class="btn btn-editar">Editar</a>
                 @php
                 $accion = $cliente->activo ? 'Dar de Baja' : 'Dar de Alta';
-                $clase = $cliente->activo ? 'btn-danger' : 'btn-success';
+                $clase = $cliente->activo ? 'btn-baja' : 'btn-alta';
                 @endphp
 
                 <a href="{{ url('/catalogos/clientes/alternar-estado/'.$cliente->id_cliente) }}" 

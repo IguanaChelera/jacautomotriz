@@ -137,10 +137,10 @@ class CatalogosController extends Controller
     }
 
     //Empleados
-    public function empleadosGet(): View
+    public function empleadosGet(Request $request): View
     {
-        $empleados = Empleado::with('puesto')->get(); 
-        
+        // Mostrar todos los empleados sin filtro de estado
+        $empleados = \App\Models\Empleado::with('puesto')->get();
         return view('catalogos.empleadosGet', [
             'empleados' => $empleados,
             'breadcrumbs' => [

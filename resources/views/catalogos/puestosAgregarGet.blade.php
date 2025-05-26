@@ -25,7 +25,7 @@
     <div class="row my-2">
         <div class="col"></div>
         <div class="col-auto">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-agregar">Guardar</button>
         </div>
     </div>
 </form>

@@ -7,7 +7,7 @@
         <h1>Empleados</h1>
     </div>
     <div class="col-auto titlebar-commands">
-        <a class="btn btn-primary" href="{{ url('/catalogos/empleados/agregar') }}">Agregar</a>
+        <a class="btn btn-agregar" href="{{ url('/catalogos/empleados/agregar') }}">Agregar</a>
     </div>
 </div>
 
@@ -27,30 +27,30 @@
 </thead>
     <tbody>
         @foreach($empleados as $empleado)
-        <tr>
-            <td class="text-center">{{ $empleado->id_Empleado }}</td>
-            <td class="text-center">{{ $empleado->nombre }}</td>
-            <td class="text-center">{{ $empleado->apellidos }}</td>
-            <td class="text-center">{{ $empleado->puesto->nombre_puesto }}</td>
-            <td class="text-center">${{ number_format($empleado->puesto->sueldo, 2) }}</td>
-            <td class="text-center">{{ $empleado->numeroSeguroSocial }}</td>
-            <td class="text-center">{{ $empleado->experiencia }} años</td>
-            <td class="text-center">{{ $empleado->estado ? 'Activo' : 'Inactivo'}}</td>
-            <td class="text-center">
-                <a href="{{ url('/catalogos/empleados/editar/'.$empleado->id_Empleado) }}" 
-                   class="btn btn-primary">Editar</a>
-                @php
-                $accion = $empleado->estado == 1 ? 'Dar de Baja' : 'Dar de Alta';
-                $clase = $empleado->estado == 1 ? 'btn-danger' : 'btn-success';
-                @endphp
+            <tr>
+                <td class="text-center">{{ $empleado->id_Empleado }}</td>
+                <td class="text-center">{{ $empleado->nombre }}</td>
+                <td class="text-center">{{ $empleado->apellidos }}</td>
+                <td class="text-center">{{ $empleado->puesto->nombre_puesto }}</td>
+                <td class="text-center">${{ number_format($empleado->puesto->sueldo, 2) }}</td>
+                <td class="text-center">{{ $empleado->numeroSeguroSocial }}</td>
+                <td class="text-center">{{ $empleado->experiencia }} años</td>
+                <td class="text-center">{{ $empleado->estado ? 'Activo' : 'Inactivo'}}</td>
+                <td class="text-center">
+                    <a href="{{ url('/catalogos/empleados/editar/'.$empleado->id_Empleado) }}" 
+                       class="btn btn-editar">Editar</a>
+                    @php
+                    $accion = $empleado->estado == 1 ? 'Dar de Baja' : 'Dar de Alta';
+                    $clase = $empleado->estado == 1 ? 'btn-baja' : 'btn-alta';
+                    @endphp
 
-                <a href="{{ url('/catalogos/empleados/alternar-estado/'.$empleado->id_Empleado) }}" 
-                   class="btn {{ $clase }}"
-                   onclick="return confirm('¿{{ $accion }} este empleado?')">
-                    {{ $accion }}
-                </a>
-            </td>
-        </tr>
+                    <a href="{{ url('/catalogos/empleados/alternar-estado/'.$empleado->id_Empleado) }}" 
+                       class="btn {{ $clase }}"
+                       onclick="return confirm('¿{{ $accion }} este empleado?')">
+                        {{ $accion }}
+                    </a>
+                </td>
+            </tr>
         @endforeach
     </tbody>
 </table>

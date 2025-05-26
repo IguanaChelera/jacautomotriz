@@ -63,7 +63,7 @@
     
     <div class="row my-3">
         <div class="col text-end">
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            <button type="submit" class="btn btn-agregar">Guardar cambios</button>
         </div>
     </div>
 </form>
