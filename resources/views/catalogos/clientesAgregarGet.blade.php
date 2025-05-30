@@ -27,7 +27,7 @@
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="correo">Correo:</label>
-                <input type="email" name="correo" id="correo" class="form-control" title="Por favor, ingresa un correo electrónico válido">
+                <input type="email" name="correo" id="correo" class="form-control" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+" title="Por favor, ingresa un correo electrónico válido que contenga un '@'">
             </div>
             
             <div class="form-group my-2">
