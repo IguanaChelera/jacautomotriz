@@ -16,19 +16,19 @@
             <div class="form-group my-2">
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" id="nombre" 
-                       value="{{ old('nombre', $empleado->nombre) }}" class="form-control" required autofocus>
+                       value="{{ old('nombre', $empleado->nombre) }}" class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">
                 <label for="apellidos">Apellidos:</label>
                 <input type="text" name="apellidos" id="apellidos" 
-                       value="{{ old('apellidos', $empleado->apellidos) }}" class="form-control" required>
+                       value="{{ old('apellidos', $empleado->apellidos) }}" class="form-control" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">
                 <label for="numeroSeguroSocial">Número Seguro Social:</label>
                 <input type="text" name="numeroSeguroSocial" id="numeroSeguroSocial" 
-                       value="{{ old('numeroSeguroSocial', $empleado->numeroSeguroSocial) }}" class="form-control" required>
+                       value="{{ old('numeroSeguroSocial', $empleado->numeroSeguroSocial) }}" class="form-control" required pattern="[0-9]+" title="Solo números">
             </div>
         </div>
         
@@ -57,6 +57,12 @@
                     <option value="1" {{ old('estado', $empleado->estado) == 1 ? 'selected' : '' }}>Activo</option>
                     <option value="0" {{ old('estado', $empleado->estado) == 0 ? 'selected' : '' }}>Inactivo</option>
                 </select>
+            </div>
+            
+            <div class="form-group my-2">
+                <label for="sueldo">Sueldo:</label>
+                <input type="number" name="sueldo" id="sueldo"
+                       value="{{ old('sueldo', $empleado->puesto->sueldo ?? '') }}" class="form-control" required min="0" step="0.01" pattern="[0-9]+([.][0-9]+)?" title="Solo números">
             </div>
         </div>
     </div>

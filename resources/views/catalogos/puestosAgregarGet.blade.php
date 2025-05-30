@@ -15,7 +15,7 @@
         <div class="form-group">
             <label for="nombre_puesto">Nombre:</label>
             <input type="text" maxlength="50" name="nombre_puesto" id="nombre_puesto" 
-                   placeholder="Ingrese el nombre del puesto" class="form-control" required autofocus>
+                   placeholder="Ingrese el nombre del puesto" class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
         </div>
     </div>
     <div class="form-group my-2">

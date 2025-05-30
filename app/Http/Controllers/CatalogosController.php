@@ -47,10 +47,18 @@ class CatalogosController extends Controller
     public function clientesAgregarPost(Request $request)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100',
-            'telefono' => 'required|string|max:20',
-            'correo' => 'nullable|email|max:100',
+            'nombre' => 'required|string|max:100|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'telefono' => 'required|digits_between:10,20',
+            'correo' => 'nullable|email|max:100|regex:/^[^0-9]*$/',
             'direccion' => 'nullable|string|max:200'
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+            'telefono.required' => 'El teléfono es obligatorio.',
+            'telefono.digits_between' => 'El teléfono debe tener entre 10 y 20 dígitos.',
+            'correo.email' => 'El correo debe ser una dirección de correo válida.',
+            'correo.regex' => 'El correo no debe contener números.',
+            'direccion.max' => 'La dirección no debe exceder 200 caracteres.'
         ]);
 
         Cliente::create($request->all());
@@ -75,10 +83,18 @@ class CatalogosController extends Controller
     public function clientesEditarPost(Request $request, $id)
     {
         $request->validate([
-            'nombre' => 'required|string|max:100',
-            'telefono' => 'required|string|max:20',
-            'correo' => 'nullable|email|max:100',
+            'nombre' => 'required|string|max:100|regex:/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/',
+            'telefono' => 'required|digits_between:10,20',
+            'correo' => 'nullable|email|max:100|regex:/^[^0-9]*$/',
             'direccion' => 'nullable|string|max:200'
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+            'telefono.required' => 'El teléfono es obligatorio.',
+            'telefono.digits_between' => 'El teléfono debe tener entre 10 y 20 dígitos.',
+            'correo.email' => 'El correo debe ser una dirección de correo válida.',
+            'correo.regex' => 'El correo no debe contener números.',
+            'direccion.max' => 'La dirección no debe exceder 200 caracteres.'
         ]);
 
         $cliente = Cliente::findOrFail($id);
@@ -167,10 +183,10 @@ class CatalogosController extends Controller
     public function empleadosAgregarPost(Request $request)
     {
         $validated = $request->validate([
-            'fk_id_puesto' => 'required|exists:puesto,id_puesto',  // Cambiado a required
+            'fk_id_puesto' => 'required|exists:puesto,id_puesto',
             'nombre' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
-            'numeroSeguroSocial' => 'required|string|max:20',
+            'numeroSeguroSocial' => 'required|digits_between:1,20',
             'experiencia' => 'required|integer|min:0',
             'estado' => 'required|boolean'
         ]);
@@ -207,10 +223,10 @@ class CatalogosController extends Controller
     public function empleadosEditarPost(Request $request, $id)
     {
         $validated = $request->validate([
-            'fk_id_puesto' => 'required|exists:puesto,id_puesto',  // Cambiado a required
+            'fk_id_puesto' => 'required|exists:puesto,id_puesto',
             'nombre' => 'required|string|max:100',
             'apellidos' => 'required|string|max:100',
-            'numeroSeguroSocial' => 'required|string|max:20',
+            'numeroSeguroSocial' => 'required|digits_between:1,20',
             'experiencia' => 'required|integer|min:0',
             'estado' => 'required|boolean'
         ]);

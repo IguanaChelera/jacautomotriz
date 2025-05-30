@@ -16,13 +16,13 @@
             <div class="form-group my-2">
                 <label for="nombre">Nombre:</label>
                 <input type="text" name="nombre" id="nombre" 
-                       value="{{ old('nombre', $cliente->nombre) }}" class="form-control" required autofocus>
+                       value="{{ old('nombre', $cliente->nombre) }}" class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">
                 <label for="telefono">Teléfono:</label>
-                <input type="text" name="telefono" id="telefono" 
-                       value="{{ old('telefono', $cliente->telefono) }}" class="form-control" required>
+                <input type="tel" name="telefono" id="telefono" 
+                       value="{{ old('telefono', $cliente->telefono) }}" class="form-control" required pattern="[0-9]{10,}" minlength="10" maxlength="20" title="Solo números, mínimo 10 dígitos">
             </div>
         </div>
         
@@ -30,7 +30,7 @@
             <div class="form-group my-2">
                 <label for="correo">Correo:</label>
                 <input type="email" name="correo" id="correo" 
-                       value="{{ old('correo', $cliente->correo) }}" class="form-control">
+                       value="{{ old('correo', $cliente->correo) }}" class="form-control" pattern="[^0-9]*" title="Solo texto, no números">
             </div>
             
             <div class="form-group my-2">

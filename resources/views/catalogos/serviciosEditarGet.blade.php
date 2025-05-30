@@ -16,7 +16,7 @@
             <div class="form-group my-2">
                 <label for="nombreServicio">Nombre del Servicio:</label>
                 <input type="text" name="nombreServicio" id="nombreServicio" 
-                       value="{{ old('nombreServicio', $servicio->nombreServicio) }}" class="form-control" required autofocus>
+                       value="{{ old('nombreServicio', $servicio->nombreServicio) }}" class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">

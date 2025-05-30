@@ -36,12 +36,12 @@
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="marcaVehiculo">Marca del Vehículo:</label>
-                <input type="text" name="marcaVehiculo" id="marcaVehiculo" class="form-control" required>
+                <input type="text" name="marcaVehiculo" id="marcaVehiculo" class="form-control" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">
                 <label for="modeloVehiculo">Modelo del Vehículo:</label>
-                <input type="text" name="modeloVehiculo" id="modeloVehiculo" class="form-control" required>
+                <input type="text" name="modeloVehiculo" id="modeloVehiculo" class="form-control" required pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s\-]+" title="Solo letras, números y guiones">
             </div>
         </div>
     </div>

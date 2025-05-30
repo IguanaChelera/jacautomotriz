@@ -15,7 +15,7 @@ class Cliente extends Model
     protected $primaryKey = 'id_cliente';
     public $incrementing = true;
     protected $keyType = "int";
-    protected $fillable = ["nombre", "telefono", "correo", "direccion", "estado"]; // O "activo"
+    protected $fillable = ["nombre", "telefono", "correo", "direccion", "activo"];
     public $timestamps = false;
 
 

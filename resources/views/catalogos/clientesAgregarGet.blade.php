@@ -15,19 +15,19 @@
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="nombre">Nombre:</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" required autofocus>
+                <input type="text" name="nombre" id="nombre" class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
             </div>
             
             <div class="form-group my-2">
                 <label for="telefono">Teléfono:</label>
-                <input type="text" name="telefono" id="telefono" class="form-control" required>
+                <input type="tel" name="telefono" id="telefono" class="form-control" required pattern="[0-9]{10,}" minlength="10" maxlength="20" title="Solo números, mínimo 10 dígitos">
             </div>
         </div>
         
         <div class="col-md-6">
             <div class="form-group my-2">
                 <label for="correo">Correo:</label>
-                <input type="email" name="correo" id="correo" class="form-control">
+                <input type="email" name="correo" id="correo" class="form-control" pattern="[^0-9]*" title="Por favor, ingresa solo texto, sin números">
             </div>
             
             <div class="form-group my-2">

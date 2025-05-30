@@ -16,7 +16,7 @@
             <label for="nombre_puesto">Nombre:</label>
             <input type="text" maxlength="50" name="nombre_puesto" id="nombre_puesto" 
                    value="{{ old('nombre_puesto', $puesto->nombre_puesto) }}"
-                   class="form-control" required autofocus>
+                   class="form-control" required autofocus pattern="[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+" title="Solo letras y espacios">
         </div>
     </div>
     <div class="form-group my-2">
